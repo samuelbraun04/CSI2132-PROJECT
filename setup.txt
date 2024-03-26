@@ -1,0 +1,33 @@
+Setup Steps
+Initialize the Project:
+
+Create the project directory and navigate into it.
+Create the client and server directories.
+Set Up the Svelte Frontend:
+
+Navigate into the client directory.
+Initialize a new Svelte project: npx degit sveltejs/template svelte-app.
+Install dependencies: npm install.
+Modify src/App.svelte and add components like BookingForm.svelte and RoomList.svelte for UI.
+Set Up the Backend Server:
+
+Navigate into the server directory.
+Initialize a new Node.js project: npm init -y.
+Install dependencies: npm install express sqlite3 body-parser.
+Create app.js for the Express server setup.
+Implement API routes in routes/hotelRoutes.js.
+Create db/database.sqlite and db/init_db.js for your SQLite database and data seeding script.
+Developing the SQLite Database:
+
+Use init_db.js to define your database schema and insert sample data.
+Example schema: Rooms, Bookings, Guests, etc.
+Use SQLite commands to create tables and insert data.
+Linking Frontend to Backend:
+
+Use fetch API or a library like Axios in your Svelte components to make HTTP requests to your Express server.
+Perform CRUD operations from the UI to the SQLite database through your API.
+Running the Project:
+
+Backend: Navigate to server/ and run node app.js to start the Express server.
+Frontend: Navigate to client/ and run npm run dev to start the Svelte app.
+Ensure both servers are running for the application to work fully.
