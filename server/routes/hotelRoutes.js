@@ -1,7 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const router = express.Router();
-const db = new sqlite3.Database('./db/database.sqlite');
+const db = new sqlite3.Database('./db/hotel_database.db');
 
 // Get all hotels for a specific hotel chain
 router.get('/hotel-chain/:hotelChainId/hotels', (req, res) => {

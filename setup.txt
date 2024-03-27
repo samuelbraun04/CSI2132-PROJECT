@@ -16,7 +16,7 @@ Initialize a new Node.js project: npm init -y.
 Install dependencies: npm install express sqlite3 body-parser.
 Create app.js for the Express server setup.
 Implement API routes in routes/hotelRoutes.js.
-Create db/database.sqlite and db/init_db.js for your SQLite database and data seeding script.
+Create db/hotel_database.db and db/init_db.js for your SQLite database and data seeding script.
 Developing the SQLite Database:
 
 Use init_db.js to define your database schema and insert sample data.
