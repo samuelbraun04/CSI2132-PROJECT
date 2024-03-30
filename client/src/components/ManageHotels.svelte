@@ -90,10 +90,3 @@
         
     </table>
 </div>
-
-<!-- Modal Component for Update Form -->
-<!-- svelte-ignore missing-declaration -->
-<!--{#if selectedItem != null}
-    <Modal {selectedItem} {updateItem}/>
-{/if}-->
-

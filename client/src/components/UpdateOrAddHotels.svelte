@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
 
+    let item;
     let itemID;
     let updatedName;
     let updatedHotelChainId;
@@ -69,10 +70,6 @@
             updatedPhoneNumber = "";
         }
     });
-    
-    
-
-    console.log(updatedAddress);
     
     async function handleUpdate() {
         const updatedItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, 

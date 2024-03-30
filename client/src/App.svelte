@@ -10,6 +10,7 @@
     import ManageCustomers from './components/ManageCustomers.svelte';
     import ManageEmployees from './components/ManageEmployees.svelte';
   	import UpdateOrAddHotels from './components/UpdateOrAddHotels.svelte';
+	import UpdateOrAddRooms from './components/UpdateOrAddRooms.svelte';
 	
 	let email = '';
 	let password = '';
@@ -49,6 +50,7 @@
       <Route path="/manage-employees" component={ManageEmployees} />
       <Route path="/views" component={Views} />
 	  <Route path="/update-add-hotels" component={UpdateOrAddHotels} />
+	  <Route path="/update-add-rooms" component={UpdateOrAddRooms} />
 	  <!-- ... other routes ... -->
 	</Router>
   {/if}
