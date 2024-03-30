@@ -16,9 +16,9 @@
         }
     });
 
-    async function handleDelete(hotelId, roomNumber){
+    async function handleDelete(sin){
         try {
-            const response = await fetch(`http://localhost:3000/employees/${SIN}`, {
+            const response = await fetch(`http://localhost:3000/employees/${sin}`, {
                 method: 'DELETE'
             });
             if (response.ok) {
@@ -76,7 +76,7 @@
                     <td>{item.hotelID}</td>
                     <td>
                         <button on:click={() => handleUpdate(item)}>Update</button>
-                        <button on:click={() => handleDelete(item.hotelId, item.roomNumber)}>Delete</button>
+                        <button on:click={() => handleDelete(item.SIN)}>Delete</button>
                     </td>
                 </tr>
             {/each}
