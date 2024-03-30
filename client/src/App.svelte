@@ -3,6 +3,13 @@
 	import { Router, Route, navigate } from 'svelte-routing';
 	import CustomerArea from './components/CustomerArea.svelte';
 	import EmployeeArea from './components/EmployeeArea.svelte';
+    import Views from './components/Views.svelte';
+	import ManageHotels from './components/ManageHotels.svelte';
+    import ManageBookings from './components/ManageBookings.svelte';
+    import ManageRooms from './components/ManageRooms.svelte';
+    import ManageCustomers from './components/ManageCustomers.svelte';
+    import ManageEmployees from './components/ManageEmployees.svelte';
+  	import UpdateOrAddHotels from './components/UpdateOrAddHotels.svelte';
 	
 	let email = '';
 	let password = '';
@@ -41,6 +48,13 @@
 	<Router>
 	  <Route path="/customer-area" component={CustomerArea} />
 	  <Route path="/employee-area" component={EmployeeArea} />
+	  <Route path="/manage-bookings" component={ManageBookings} />
+	  <Route path="/manage-hotels" component={ManageHotels} />
+      <Route path="/manage-rooms" component={ManageRooms} />
+   	  <Route path="/manage-customers" component={ManageCustomers} />
+      <Route path="/manage-employees" component={ManageEmployees} />
+      <Route path="/views" component={Views} />
+	  <Route path="/update-add-hotels" component={UpdateOrAddHotels} />
 	  <!-- ... other routes ... -->
 	</Router>
   {/if}
