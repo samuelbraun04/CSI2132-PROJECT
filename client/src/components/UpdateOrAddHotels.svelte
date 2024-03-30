@@ -10,19 +10,31 @@
     let updatedNumberOfRooms;
     let updatedEmailAddress;
     let updatedPhoneNumber;
+    let hotelChains = [];
 
     let type = localStorage.getItem('action');
     let updateVisibility = (type != 'update');
     let createVisibility = (type != 'insert');
 
     onMount(async () => {
+
+        //get list of all hotel chains for drop-down
+        try {
+            const response = await fetch('http://localhost:3000/hotel-chains');
+            if (!response.ok) {
+                throw new Error('Failed to fetch items');
+            }
+            hotelChains = await response.json();
+        } catch (error) {
+            console.error(error);
+        }
+
+        //if updating a hotel, get all the current data for that specific hotel
         if (type == 'update'){
             itemID = localStorage.getItem('itemID');
 
-            console.log(itemID);
-
-            try {
-                /*const response = await fetch(`http://localhost:3000/hotels/${itemID}`);
+            /*try {
+                const response = await fetch(`http://localhost:3000/hotels/${itemID}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch item');
                 }
@@ -34,20 +46,28 @@
                 updatedAddress = item.address;
                 updatedNumberOfRooms = item.numberOfRooms;
                 updatedEmailAddress = item.emailAddress;
-                updatedPhoneNumber = item.phoneNumber;*/
+                updatedPhoneNumber = item.phoneNumber;
+            } catch (error) {
+                console.error(error);
+            }*/
 
-                updatedName = "test_name";
-                updatedHotelChainId = "test_chainid";
-                updatedStars = "test_stars";
+            updatedName = "test_name";
+                updatedHotelChainId = 2;
+                updatedStars = "3";
                 updatedAddress = "test_address";
                 updatedNumberOfRooms = "test_numberOfRooms";
                 updatedEmailAddress = "test_email";
                 updatedPhoneNumber = "test_phone";
-            } catch (error) {
-                console.error(error);
-            }
         }
-        
+        else{
+            updatedName = "";
+            updatedHotelChainId = null;
+            updatedStars = null;
+            updatedAddress = "";
+            updatedNumberOfRooms = "";
+            updatedEmailAddress = "";
+            updatedPhoneNumber = "";
+        }
     });
     
     
@@ -79,8 +99,6 @@
     async function handleCreate() {
         const newItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, 
             numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
-        
-        console.log(JSON.stringify(newItem));
         
         //add item in database
         /*const response = await fetch('http://localhost:3000/hotels', {
@@ -116,12 +134,23 @@
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Hotel Chain Id:</label>
-                    <input type="text" bind:value={updatedHotelChainId}>
+                    <!--<input type="text" bind:value={updatedHotelChainId}>-->
+                    <select class="form-select" bind:value={updatedHotelChainId}>
+                        {#each hotelChains as hotelChain}
+                            <option value={hotelChain.id}>{hotelChain.id}</option>
+                        {/each}
+                    </select>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Stars:</label>
-                    <input type="text" bind:value={updatedStars}>
+                    <select class="form-select" bind:value={updatedStars}>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
