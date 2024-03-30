@@ -72,7 +72,7 @@
     });
     
     async function handleUpdate() {
-        const updatedItem = { updatedPrice, updatedCapacity, updatedStatus, updatedView, updatedExtendable, updatedAmenities, updatedDamages };
+        const updatedItem = { price: updatedPrice, capacity: updatedCapacity, status: updatedStatus, view: updatedView, extendable: updatedExtendable, amenities: updatedAmenities, damages: updatedDamages };
 
         //update item in database
         try {
@@ -94,7 +94,7 @@
     }
 
     async function handleCreate() {
-        const newItem = { updatedRoomNumber, updatedHotelId, updatedPrice, updatedCapacity, updatedStatus, updatedView, updatedExtendable, updatedAmenities, updatedDamages };
+        const newItem = { hotelId: updatedHotelId, roomNumber: updatedRoomNumber, price: updatedPrice, capacity: updatedCapacity, status: updatedStatus, view: updatedView, extendable: updatedExtendable, amenities: updatedAmenities, damages: updatedDamages };
         
         //add item in database
         const response = await fetch('http://localhost:3000/rooms', {
@@ -125,12 +125,14 @@
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Room Number:</label>
-                    <input type="text" bind:value={updatedRoomNumber}>
+                    <input hidden={updateVisibility} type="text" bind:value={updatedRoomNumber} readonly>
+                    <input hidden={createVisibility} type="text" bind:value={updatedRoomNumber}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Hotel ID:</label>
-                    <select class="form-select" bind:value={updatedHotelId}>
+                    <input hidden={updateVisibility} type="text" bind:value={updatedHotelId} readonly>
+                    <select hidden={createVisibility} class="form-select" bind:value={updatedHotelId}>
                         {#each hotels as hotel}
                             <option value={hotel.id}>{hotel.id}</option>
                         {/each}

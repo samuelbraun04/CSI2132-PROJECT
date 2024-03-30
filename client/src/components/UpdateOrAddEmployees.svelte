@@ -54,7 +54,7 @@
     });
     
     async function handleUpdate() {
-        const updatedItem = { updatedPersonID, updatedPositions, updatedHotelID };
+        const updatedItem = { personID: updatedPersonID, positions: updatedPositions, hotelID: updatedHotelID };
 
         //update item in database
         try {
@@ -75,7 +75,7 @@
     }
 
     async function handleCreate() {
-        const newItem = { updatedSIN, updatedPersonID, updatedPositions, updatedHotelID };
+        const newItem = { SIN: updatedSIN, personID: updatedPersonID, positions: updatedPositions, hotelID: updatedHotelID };
         
         //add item in database
         const response = await fetch('http://localhost:3000/employees', {
@@ -106,7 +106,8 @@
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>SIN:</label>
-                    <input type="text" bind:value={updatedSIN}>
+                    <input hidden={updateVisibility} type="text" bind:value={updatedSIN} readonly>
+                    <input hidden={createVisibility} type="text" bind:value={updatedSIN}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->

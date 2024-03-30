@@ -33,8 +33,9 @@
         //if updating a hotel, get all the current data for that specific hotel
         if (type == 'update'){
             itemID = localStorage.getItem('itemID');
+            itemID = 1
 
-            /*try {
+            try {
                 const response = await fetch(`http://localhost:3000/hotels/${itemID}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch item');
@@ -50,9 +51,8 @@
                 updatedPhoneNumber = item.phoneNumber;
             } catch (error) {
                 console.error(error);
-            }*/
-
-            updatedName = "test_name";
+            }
+                updatedName = "test_name";
                 updatedHotelChainId = 2;
                 updatedStars = "3";
                 updatedAddress = "test_address";
@@ -76,8 +76,8 @@
             numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
         
         //update item in database
-        /*try {
-            const response = await fetch(`http://localhost:3000/hotels/${updatedItem.id}`, {
+        try {
+            const response = await fetch(`http://localhost:3000/hotels/${itemID}`, {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json'
@@ -86,7 +86,7 @@
             });
         } catch (error) {
         console.error('Error updating item:', error);
-        }*/
+        }
         
         localStorage.removeItem('item');
         localStorage.removeItem('action');
@@ -98,7 +98,7 @@
             numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
         
         //add item in database
-        /*const response = await fetch('http://localhost:3000/hotels', {
+        const response = await fetch('http://localhost:3000/hotels', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -111,7 +111,7 @@
         } else {
             // Handle error
             console.error('Failed to create item');
-        }*/
+        }
         
         localStorage.removeItem('action');
         navigate('/manage-hotels');

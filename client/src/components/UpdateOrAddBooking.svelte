@@ -4,10 +4,12 @@
 
     let item;
     let itemID;
-    let updatedPersonID;
+    let updatedID;
+    let updatedCustomerID;
     let updatedHotelID;
-    let updatedDateOfRegistration;
-    let updatedPaymentID;
+    let updatedRoomNumber;
+    let updatedStartDate;
+    let updatedEndDate;
     let hotels = [];
 
     let type = localStorage.getItem('action');
@@ -16,50 +18,43 @@
 
     onMount(async () => {
 
-        //get list of all hotel chains for drop-down
-        try {
-            const response = await fetch('http://localhost:3000/hotels');
-            if (!response.ok) {
-                throw new Error('Failed to fetch items');
-            }
-            hotels = await response.json();
-        } catch (error) {
-            console.error(error);
-        }
-
-        //if updating a hotel, get all the current data for that specific hotel
+        //if updating a booking, get all the current data for that specific booking
         if (type == 'update'){
             itemID = localStorage.getItem('itemID');
 
             try {
-                const response = await fetch(`http://localhost:3000/customers/${itemID}`);
+                const response = await fetch(`http://localhost:3000/books/${itemID}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch item');
                 }
                 item = await response.json();
 
-                updatedPersonID = item.personID;
-                updatedHotelID = item.hotelID;
-                updatedDateOfRegistration = item.dateOfRegistration;
-                updatedPaymentID = item.paymentID;
+                updatedID = item.id
+                updatedCustomerID = item.customerID;
+                updatedHotelID = "";
+                updatedRoomNumber = item.roomNumber;
+                updatedStartDate = item.startDate;
+                updatedEndDate = item.endDate;
             } catch (error) {
                 console.error(error);
             }
         }
         else{
-            updatedPersonID = "";
+            updatedID="";
+            updatedCustomerID = "";
             updatedHotelID = "";
-            updatedDateOfRegistration = "";
-            updatedPaymentID = "";
+            updatedRoomNumber = "";
+            updatedStartDate = "";
+            updatedEndDate = "";
         }
     });
     
     async function handleUpdate() {
-        const updatedItem = { hotelID: updatedHotelID, dateOfRegistration: updatedDateOfRegistration, personID: updatedPersonID, paymentID: updatedPaymentID };
+        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate };
 
         //update item in database
         try {
-            const response = await fetch(`http://localhost:3000/customers/${itemID}`, {
+            const response = await fetch(`http://localhost:3000/books/${itemID}`, {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json'
@@ -70,16 +65,16 @@
         console.error('Error updating item:', error);
         }
         
-        localStorage.removeItem('itemPersonID');
+        localStorage.removeItem('itemCustomerID');
         localStorage.removeItem('action');
-        navigate('/manage-customers');
+        navigate('/manage-bookings');
     }
 
     async function handleCreate() {
-        const newItem = { hotelID: updatedHotelID, dateOfRegistration: updatedDateOfRegistration, personID: updatedPersonID, paymentID: updatedPaymentID };
+        const newItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate };
         
         //add item in database
-        const response = await fetch('http://localhost:3000/customers', {
+        const response = await fetch('http://localhost:3000/books', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -95,38 +90,39 @@
         }
         
         localStorage.removeItem('action');
-        navigate('/manage-customers');
+        navigate('/manage-bookings');
     }
 </script>
 
 <div class="modal">
     <div class="modal-content">
-            <h1 hidden={updateVisibility} >Update Customer</h1>
-            <h1 hidden={createVisibility}>Create New Customer</h1>
+            <h1 hidden={updateVisibility} >Update Booking</h1>
+            <h1 hidden={createVisibility}>Create New Booking</h1>
             <div id=inputForm>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
-                    <label>Person ID:</label>
-                    <input type="text" bind:value={updatedPersonID}>
+                    <label>Customer ID:</label>
+                    <input type="text" bind:value={updatedCustomerID}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Hotel ID:</label>
-                    <select class="form-select" bind:value={updatedHotelID}>
-                        {#each hotels as hotel}
-                            <option value={hotel.id}>{hotel.id}</option>
-                        {/each}
-                    </select>
+                    <input type="text" bind:value={updatedHotelID}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
-                    <label>Date of Registration:</label>
-                    <input type="date" bind:value={updatedDateOfRegistration}>
+                    <label>Room Number:</label>
+                    <input type="text" bind:value={updatedRoomNumber}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
-                    <label>Payment ID:</label>
-                    <input type="text" bind:value={updatedPaymentID}>
+                    <label>Start Date:</label>
+                    <input type="date" bind:value={updatedStartDate}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>End Date:</label>
+                    <input type="date" bind:value={updatedEndDate}>
                 </div>
             </div>
             

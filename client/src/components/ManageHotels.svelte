@@ -60,8 +60,9 @@
     <table>
         <thead>
             <tr>
+                <th>Hotel ID</th>
                 <th>Hotel Name</th>
-                <th>Hotel Chain Id</th>
+                <th>Hotel Chain ID</th>
                 <th>Stars</th>
                 <th>Address</th>
                 <th>Number of Rooms</th>
@@ -73,6 +74,7 @@
         <tbody>
             {#each items as item}
                 <tr>
+                    <td>{item.id}</td>
                     <td>{item.name}</td>
                     <td>{item.hotelChainId}</td>
                     <td>{item.stars}</td>

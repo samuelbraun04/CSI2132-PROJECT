@@ -16,9 +16,9 @@
         }
     });
 
-    async function handleDelete(personID){
+    async function handleDelete(id){
         try {
-            const response = await fetch(`http://localhost:3000/customers/${personID}`, {
+            const response = await fetch(`http://localhost:3000/customers/${id}`, {
                 method: 'DELETE'
             });
             if (response.ok) {
@@ -41,7 +41,7 @@
     }
 
     function handleUpdate(item){
-        localStorage.setItem('itemPersonID', item.personID);
+        localStorage.setItem('itemID', item.id);
         localStorage.setItem('action', 'update');
         navigate('/update-add-customers');
     }
@@ -60,6 +60,7 @@
     <table>
         <thead>
             <tr>
+                <th>Customer ID</th>
                 <th>Person ID</th>
                 <th>Hotel ID</th>
                 <th>Date of Registration</th>
@@ -70,13 +71,14 @@
         <tbody>
             {#each items as item}
                 <tr>
+                    <td>{item.id}</td>
                     <td>{item.personID}</td>
                     <td>{item.hotelID}</td>
                     <td>{item.dateOfRegistration}</td>
                     <td>{item.paymentID}</td>
                     <td>
                         <button on:click={() => handleUpdate(item)}>Update</button>
-                        <button on:click={() => handleDelete(item.personID)}>Delete</button>
+                        <button on:click={() => handleDelete(item.id)}>Delete</button>
                     </td>
                 </tr>
             {/each}
