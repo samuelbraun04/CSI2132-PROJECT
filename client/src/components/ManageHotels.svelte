@@ -56,69 +56,39 @@
 
 <div>
     <h1>Manage Hotels</h1>
-    <button on:click={() => handleInsert()}>Insert New Hotel</button>
-    <li>
-        <div>
-            <div><!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Hotel Name:</label>
-            </div>
-            <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Hotel Chain Id:</label>
-            </div>
-            <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Stars:</label>
-            </div>
-            <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Address:</label>
-            </div>
-            <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Number of Rooms:</label>
-            </div>
-            <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Email:</label>
-            </div>
-            <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>Phone Number:</label>
-            </div>
-        </div>
+    <button id=insertBtn on:click={() => handleInsert()}>Insert New Hotel</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Hotel Name</th>
+                <th>Hotel Chain Id</th>
+                <th>Stars</th>
+                <th>Address</th>
+                <th>Number of Rooms</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
         
-
-        {#each items as item}
-            <div>
-                <div>
-                    <input type="text" value={item.name} readonly>
-                </div>
-                <div>
-                    <input type="text" value={item.hotelChainId} readonly>
-                </div>
-                <div>
-                    <input type="text" value={item.stars} readonly>
-                </div>
-                <div>
-                    <input type="text" value={item.address} readonly>
-                </div>
-                <div>
-                    <input type="text" value={item.numberOfRooms} readonly>
-                </div>
-                <div>
-                    <input type="text" value={item.emailAddress} readonly>
-                </div>
-                <div>   
-                    <input type="text" value={item.phoneNumber} readonly>
-                </div>
-                <div>
-                    <button on:click={() => handleUpdate(item)}>Update</button>
-                    <button on:click={() => handleDelete(item.id)}>Delete</button>
-                </div>
-            </div>
-        {/each}
-    </li>
+        <tbody>
+            {#each items as item}
+                <tr>
+                    <td>{item.name}</td>
+                    <td>{item.hotelChainId}</td>
+                    <td>{item.stars}</td>
+                    <td>{item.address}</td>
+                    <td>{item.numberOfRooms}</td>
+                    <td>{item.emailAddress}</td>
+                    <td>{item.phoneNumber}</td>
+                    <td>
+                        <button on:click={() => handleUpdate(item)}>Update</button>
+                        <button on:click={() => handleDelete(item.id)}>Delete</button>
+                    </td>
+                </tr>
+            {/each}
+        </tbody>
+        
+    </table>
 </div>
 
 <!-- Modal Component for Update Form -->

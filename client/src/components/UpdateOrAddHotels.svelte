@@ -105,30 +105,48 @@
 
 <div class="modal">
     <div class="modal-content">
-            <h2 hidden={updateVisibility} >Update Hotel</h2>
-            <h2 hidden={createVisibility}>Create New Hotel</h2>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Hotel Name:</label>
-            <input type="text" bind:value={updatedName}>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Hotel Chain Id:</label>
-            <input type="text" bind:value={updatedHotelChainId}>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Stars:</label>
-            <input type="text" bind:value={updatedStars}>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Address:</label>
-            <input type="text" bind:value={updatedAddress}>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Number of Rooms:</label>
-            <input type="text" bind:value={updatedNumberOfRooms}>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Email Address:</label>
-            <input type="text" bind:value={updatedEmailAddress}>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>Phone:</label>
-            <input type="text" bind:value={updatedPhoneNumber}>
-            <button hidden={updateVisibility} on:click={handleUpdate}>Update</button>
-            <button hidden={createVisibility} on:click={handleCreate}>Create</button>
+            <h1 hidden={updateVisibility} >Update Hotel</h1>
+            <h1 hidden={createVisibility}>Create New Hotel</h1>
+            <div id=inputForm>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Hotel Name:</label>
+                    <input type="text" bind:value={updatedName}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Hotel Chain Id:</label>
+                    <input type="text" bind:value={updatedHotelChainId}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Stars:</label>
+                    <input type="text" bind:value={updatedStars}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Address:</label>
+                    <input type="text" bind:value={updatedAddress}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Number of Rooms:</label>
+                    <input type="text" bind:value={updatedNumberOfRooms}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Email Address:</label>
+                    <input type="text" bind:value={updatedEmailAddress}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Phone Number:</label>
+                    <input type="text" bind:value={updatedPhoneNumber}>
+                </div>
+            </div>
+            
+            
+            <button id='centerBtn' hidden={updateVisibility} on:click={handleUpdate}>Update</button>
+            <button id='centerBtn' hidden={createVisibility} on:click={handleCreate}>Create</button>
     </div>
 </div>

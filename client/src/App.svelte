@@ -30,20 +30,14 @@
   </script>
   
   {#if !loggedIn}
+  	<h1>Login</h1>
 	<div class="login-form">
-	  <h2>Login</h2>
-	  <input type="email" bind:value={email} placeholder="Email" />
-	  <input type="password" bind:value={password} placeholder="Password" />
-	  <label>
-		<input type="radio" bind:group={role} value="customer" />
-		Customer
-	  </label>
-	  <label>
-		<input type="radio" bind:group={role} value="employee" />
-		Employee
-	  </label>
-	  <button on:click={handleSubmit}>Log In</button>
+	  <input id="login" type="email" bind:value={email} placeholder="Email" />
+	  <input id="login" type="password" bind:value={password} placeholder="Password" />
+	  <label><input type="radio" bind:group={role} value="customer" />Customer</label>
+	  <label><input type="radio" bind:group={role} value="employee" />Employee</label>
 	</div>
+	<button id='centerBtn' on:click={handleSubmit}>Log In</button>
   {:else}
 	<Router>
 	  <Route path="/customer-area" component={CustomerArea} />

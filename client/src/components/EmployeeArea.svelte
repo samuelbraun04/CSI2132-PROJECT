@@ -33,12 +33,17 @@
   
   <div>
     <h1>Admin</h1>
-    <!-- Add your employee-specific UI here -->
-    <button on:click={manageBookings}>Manage Bookings</button>
-    <button on:click={manageHotels}>Manage Hotels</button>
-    <button on:click={manageRooms}>Manage Rooms</button>
-    <button on:click={manageEmployees}>Manage Employees</button>
-    <button on:click={manageCustomers}>Manage Customers</button>
-    <button on:click={views}>Views</button>
+    <div id=adminPage class='container'>
+      <div class="first-div">
+        <button id=employeeButtons on:click={manageBookings}>Manage Bookings</button>
+        <button id=employeeButtons on:click={manageHotels}>Manage Hotels</button>
+        <button id=employeeButtons on:click={manageRooms}>Manage Rooms</button>
+      </div>
+      <div class="second-div">
+        <button id=employeeButtons on:click={manageEmployees}>Manage Employees</button>
+        <button id=employeeButtons on:click={manageCustomers}>Manage Customers</button>
+        <button id=employeeButtons on:click={views}>Views</button>
+      </div>
+    </div>
   </div>
   
