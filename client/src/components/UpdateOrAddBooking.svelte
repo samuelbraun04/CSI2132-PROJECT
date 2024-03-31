@@ -10,13 +10,34 @@
     let updatedRoomNumber;
     let updatedStartDate;
     let updatedEndDate;
+    let updatedPaymentID;
+    let customers = [];
     let hotels = [];
+    let rooms = [];
 
     let type = localStorage.getItem('action');
     let updateVisibility = (type != 'update');
     let createVisibility = (type != 'insert');
 
     onMount(async () => {
+
+        try {
+            const [customersRes, hotelsRes, roomsRes] = await Promise.all([
+                fetch('http://localhost:3000/customers-with-names'),
+                fetch('http://localhost:3000/hotels'),
+                fetch('http://localhost:3000/rooms'),
+            ]);
+
+            // if (!customersRes.ok || !hotelsRes.ok || !roomsRes.ok) {
+            //     throw new Error('One or more requests failed');
+            // }
+
+            customers = await customersRes.json();
+            hotels = await hotelsRes.json();
+            rooms = await roomsRes.json();
+        } catch (error) {
+            console.error("Failed to fetch data:", error);
+        }
 
         //if updating a booking, get all the current data for that specific booking
         if (type == 'update'){
@@ -31,7 +52,8 @@
 
                 updatedID = item.id
                 updatedCustomerID = item.customerID;
-                updatedHotelID = "";
+                updatedHotelID = item.hotelID;
+                updatedPaymentID = item.paymentID;
                 updatedRoomNumber = item.roomNumber;
                 updatedStartDate = item.startDate;
                 updatedEndDate = item.endDate;
@@ -46,6 +68,8 @@
             updatedRoomNumber = "";
             updatedStartDate = "";
             updatedEndDate = "";
+            updatedPaymentID = "";
+
         }
     });
     
@@ -71,9 +95,17 @@
     }
 
     async function handleCreate() {
-        const newItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate };
-        
-        //add item in database
+        // Assuming updatedHotelID and updatedPaymentID are the new state variables that hold the selected hotel ID and payment ID
+        const newItem = {
+            customerID: updatedCustomerID,
+            roomNumber: updatedRoomNumber,
+            startDate: updatedStartDate,
+            endDate: updatedEndDate,
+            hotelID: updatedHotelID, // Include this in your newItem object
+            paymentID: updatedPaymentID // Include this in your newItem object
+        };
+        console.log('testing');
+        // Add item in database
         const response = await fetch('http://localhost:3000/books', {
             method: 'POST',
             headers: {
@@ -88,7 +120,7 @@
             // Handle error
             console.error('Failed to create item');
         }
-        
+
         localStorage.removeItem('action');
         navigate('/manage-bookings');
     }
@@ -100,19 +132,28 @@
             <h1 hidden={createVisibility}>Create New Booking</h1>
             <div id=inputForm>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Customer ID:</label>
-                    <input type="text" bind:value={updatedCustomerID}>
+                    <select bind:value={updatedCustomerID}>
+                        {#each customers as customer}
+                            <option value={customer.id}>{customer.firstName} {customer.lastName}</option>
+                        {/each}
+                    </select>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Hotel ID:</label>
-                    <input type="text" bind:value={updatedHotelID}>
+                    <select bind:value={updatedHotelID}>
+                        {#each hotels as { id, name }}
+                            <option value={id}>{name} ({id})</option>
+                        {/each}
+                    </select>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Room Number:</label>
-                    <input type="text" bind:value={updatedRoomNumber}>
+                    <select bind:value={updatedRoomNumber}>
+                        {#each rooms as { roomNumber }}
+                            <option value={roomNumber}>{roomNumber}</option>
+                        {/each}
+                    </select>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->

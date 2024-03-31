@@ -51,7 +51,6 @@
         navigate('/update-add-hotels');
     }
 
-    
 </script>
 
 <div>

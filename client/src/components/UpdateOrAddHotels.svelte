@@ -18,58 +18,50 @@
     let createVisibility = (type != 'insert');
 
     onMount(async () => {
+    // Get list of all hotel chains for drop-down
+    try {
+        const response = await fetch('http://localhost:3000/hotel-chains');
+        if (!response.ok) {
+            throw new Error('Failed to fetch items');
+        }
+        hotelChains = await response.json();
+    } catch (error) {
+        console.error("Failed to fetch hotel chains:", error);
+    }
 
-        //get list of all hotel chains for drop-down
+    // If updating a hotel, get all the current data for that specific hotel
+    if (type == 'update') {
+        itemID = localStorage.getItem('itemID'); // Ensure this is dynamic
+
         try {
-            const response = await fetch('http://localhost:3000/hotel-chains');
+            const response = await fetch(`http://localhost:3000/hotels/${itemID}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch items');
+                throw new Error('Failed to fetch hotel details');
             }
-            hotelChains = await response.json();
+            item = await response.json();
+
+            // Update state variables with the fetched hotel details
+            updatedName = item.name;
+            updatedHotelChainId = item.hotelChainId;
+            updatedStars = String(item.stars);
+            updatedAddress = item.address;
+            updatedNumberOfRooms = item.numberOfRooms;
+            updatedEmailAddress = item.emailAddress;
+            updatedPhoneNumber = item.phoneNumber;
         } catch (error) {
-            console.error(error);
+            console.error("Failed to fetch hotel details:", error);
         }
-
-        //if updating a hotel, get all the current data for that specific hotel
-        if (type == 'update'){
-            itemID = localStorage.getItem('itemID');
-            itemID = 1
-
-            try {
-                const response = await fetch(`http://localhost:3000/hotels/${itemID}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch item');
-                }
-                item = await response.json();
-
-                updatedName = item.name;
-                updatedHotelChainId = item.hotelChainId;
-                updatedStars = item.stars;
-                updatedAddress = item.address;
-                updatedNumberOfRooms = item.numberOfRooms;
-                updatedEmailAddress = item.emailAddress;
-                updatedPhoneNumber = item.phoneNumber;
-            } catch (error) {
-                console.error(error);
-            }
-                updatedName = "test_name";
-                updatedHotelChainId = 2;
-                updatedStars = "3";
-                updatedAddress = "test_address";
-                updatedNumberOfRooms = "test_numberOfRooms";
-                updatedEmailAddress = "test_email";
-                updatedPhoneNumber = "test_phone";
-        }
-        else{
-            updatedName = "";
-            updatedHotelChainId = null;
-            updatedStars = null;
-            updatedAddress = "";
-            updatedNumberOfRooms = "";
-            updatedEmailAddress = "";
-            updatedPhoneNumber = "";
-        }
-    });
+    } else {
+        // Initialize state variables for creating a new hotel
+        updatedName = "";
+        updatedHotelChainId = null;
+        updatedStars = null;
+        updatedAddress = "";
+        updatedNumberOfRooms = "";
+        updatedEmailAddress = "";
+        updatedPhoneNumber = "";
+    }
+});
     
     async function handleUpdate() {
         const updatedItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, 
@@ -142,11 +134,11 @@
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Stars:</label>
                     <select class="form-select" bind:value={updatedStars}>
-                        <option value=1>1</option>
-                        <option value=2>2</option>
-                        <option value=3>3</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -170,8 +162,7 @@
                     <input type="text" bind:value={updatedPhoneNumber}>
                 </div>
             </div>
-            
-            
+ 
             <button id='centerBtn' hidden={updateVisibility} on:click={handleUpdate}>Update</button>
             <button id='centerBtn' hidden={createVisibility} on:click={handleCreate}>Create</button>
     </div>

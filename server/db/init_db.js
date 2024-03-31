@@ -58,6 +58,77 @@ const insertHotelChains = (db) => {
     });
 };
 
+const insertBookings = (db) => {
+    const bookings = [
+        { customerID: 1, paymentID: 1001, roomNumber: '3902', startDate: '2024-04-01', endDate: '2024-04-05', hotelID: 1 },
+        { customerID: 2, paymentID: 1002, roomNumber: '4005', startDate: '2024-04-10', endDate: '2024-04-15', hotelID: 2 },
+        { customerID: 3, paymentID: 1003, roomNumber: '4004', startDate: '2024-05-01', endDate: '2024-05-08', hotelID: 3 },
+        { customerID: 4, paymentID: 1004, roomNumber: '3603', startDate: '2024-06-10', endDate: '2024-06-20', hotelID: 4 },
+        { customerID: 5, paymentID: 1005, roomNumber: '2801', startDate: '2024-07-01', endDate: '2024-07-05', hotelID: 5 }
+    ];
+
+    bookings.forEach(booking => {
+        db.run(`INSERT INTO Books (customerID, paymentID, roomNumber, startDate, endDate, hotelID) VALUES (?, ?, ?, ?, ?, ?)`,
+        [booking.customerID, booking.paymentID, booking.roomNumber, booking.startDate, booking.endDate, booking.hotelID], function(err) {
+            if (err) console.error(err.message);
+            else console.log(`Booking inserted for Customer ID: ${booking.customerID}`);
+        });
+    });
+};
+
+const insertPersons = (db) => {
+    const persons = [
+        { firstName: 'John', lastName: 'Doe', address: '123 Elm Street' },
+        { firstName: 'Jane', lastName: 'Doe', address: '456 Oak Street' },
+        { firstName: 'Jim', lastName: 'Beam', address: '789 Pine Street' },
+        { firstName: 'Jack', lastName: 'Daniels', address: '101 Maple Street' },
+        { firstName: 'Josie', lastName: 'Wales', address: '202 Birch Street' }
+    ];
+
+    persons.forEach(person => {
+        db.run(`INSERT INTO Person (firstName, lastName, address) VALUES (?, ?, ?)`,
+        [person.firstName, person.lastName, person.address], function(err) {
+            if (err) console.error(err.message);
+            else console.log(`Person inserted with name: ${person.firstName} ${person.lastName}`);
+        });
+    });
+};
+
+const insertCustomers = (db) => {
+    const customers = [
+        { hotelID: 1, dateOfRegistration: '2023-01-01', personID: 1 },
+        { hotelID: 2, dateOfRegistration: '2023-01-02', personID: 2 },
+        { hotelID: 3, dateOfRegistration: '2023-01-03', personID: 3 },
+        { hotelID: 4, dateOfRegistration: '2023-01-04', personID: 4 },
+        { hotelID: 5, dateOfRegistration: '2023-01-05', personID: 5 }
+    ];
+
+    customers.forEach(customer => {
+        db.run(`INSERT INTO Customer (hotelID, dateOfRegistration, personID) VALUES (?, ?, ?)`,
+        [customer.hotelID, customer.dateOfRegistration, customer.personID], function(err) {
+            if (err) console.error(err.message);
+            else console.log(`Customer inserted with Person ID: ${customer.personID}`);
+        });
+    });
+};
+
+const insertPayments = (db) => {
+    const payments = [
+        { bookingID: 1, amount: 500.00, paymentDate: '2024-03-25', hotelID: 1 },
+        { bookingID: 2, amount: 750.00, paymentDate: '2024-03-30', hotelID: 1 },
+        { bookingID: 3, amount: 1200.00, paymentDate: '2024-04-15', hotelID: 2 },
+        { bookingID: 4, amount: 1500.00, paymentDate: '2024-05-20', hotelID: 2 },
+        { bookingID: 5, amount: 300.00, paymentDate: '2024-06-01', hotelID: 3 }
+    ];
+
+    payments.forEach(payment => {
+        db.run(`INSERT INTO Payment (bookingID, amount, paymentDate, hotelID) VALUES (?, ?, ?, ?)`,
+        [payment.bookingID, payment.amount, payment.paymentDate, payment.hotelID], function(err) {
+            if (err) console.error(err.message);
+            else console.log(`Payment inserted for Booking ID: ${payment.bookingID}`);
+        });
+    });
+};
   
 const insertHotels = (db) => {
     const hotels = [
@@ -411,10 +482,8 @@ const initTables = (callback) => {
         hotelID INTEGER,
         dateOfRegistration DATE NOT NULL,
         personID INTEGER NOT NULL,
-        paymentID INTEGER,
         FOREIGN KEY (hotelID) REFERENCES Hotel(id),
-        FOREIGN KEY (personID) REFERENCES Person(id),
-        FOREIGN KEY (paymentID) REFERENCES Payment(id)
+        FOREIGN KEY (personID) REFERENCES Person(id)
       );`);
       
       db.run(`CREATE TABLE IF NOT EXISTS Payment (
@@ -430,11 +499,14 @@ const initTables = (callback) => {
       db.run(`CREATE TABLE IF NOT EXISTS Books (
         id INTEGER PRIMARY KEY,
         customerID INTEGER NOT NULL,
+        hotelID INTEGER NOT NULL,
         roomNumber TEXT NOT NULL,
-        startDate DATE NOT NULL CHECK (startDate >= date('now')),
-        endDate DATE NOT NULL CHECK (endDate > startDate),
+        startDate DATE NOT NULL,
+        endDate DATE NOT NULL,
+        paymentID INTEGER,
         FOREIGN KEY (customerID) REFERENCES Customer(id),
-        FOREIGN KEY (roomNumber) REFERENCES Room(roomNumber)
+        FOREIGN KEY (roomNumber) REFERENCES Room(roomNumber),
+        FOREIGN KEY (paymentID) REFERENCES Payment(id)
       );`);
 
       db.run(`CREATE TABLE IF NOT EXISTS Search (
@@ -476,6 +548,10 @@ const initTables = (callback) => {
             insertHotelChains(db);
             insertHotels(db);
             insertRooms(db);
+            insertBookings(db);
+            insertPayments(db);
+            insertCustomers(db);
+            insertPersons(db);
             // Ensure you manage these calls correctly, maybe chaining them to ensure order, if necessary.
         }
     });

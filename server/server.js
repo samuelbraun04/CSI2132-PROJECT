@@ -141,6 +141,26 @@ app.put('/hotels/:id', (req, res) => {
   });
 });
 
+app.get('/hotels/:id', (req, res) => {
+  console.log("Route /hotels/:id accessed");
+  const { id } = req.params;
+  console.log("Requested ID:", id);
+  const sql = 'SELECT * FROM Hotel WHERE id = ?';
+
+  // Assuming db is your SQLite database connection
+  db.get(sql, [id], (err, hotel) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    if (hotel) {
+      res.json(hotel);
+    } else {
+      res.status(404).json({ error: 'Hotel not found' });
+    }
+  });
+});
+
 // Delete a Hotel
 app.delete('/hotels/:id', (req, res) => {
   const { id } = req.params;
@@ -320,6 +340,21 @@ app.get('/customers', (req, res) => {
   });
 });
 
+app.get('/customers-with-names', (req, res) => {
+  const sql = `
+    SELECT Customer.id, Person.firstName, Person.lastName
+    FROM Customer
+    JOIN Person ON Customer.personID = Person.id
+  `;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
 // Update a Customer
 app.put('/customers/:id', (req, res) => {
   const { hotelID, dateOfRegistration, personID, paymentID } = req.body;
@@ -377,8 +412,11 @@ app.delete('/payments/:id', (req, res) => {
 
 // Create a Booking
 app.post('/books', (req, res) => {
-  const { customerID, roomNumber, startDate, endDate } = req.body;
-  db.run(`INSERT INTO Books (customerID, roomNumber, startDate, endDate) VALUES (?, ?, ?, ?)`, [customerID, roomNumber, startDate, endDate], function(err) {
+  // Include hotelID in the destructured assignment
+  const { customerID, roomNumber, startDate, endDate, hotelID, paymentID } = req.body;
+  // Make sure to include hotelID in the VALUES list
+  db.run(`INSERT INTO Books (customerID, roomNumber, startDate, endDate, hotelID, paymentID) VALUES (?, ?, ?, ?, ?, ?)`, 
+  [customerID, roomNumber, startDate, endDate, hotelID, paymentID], function(err) {
     if (err) res.status(500).json({ error: err.message });
     else res.status(201).json({ id: this.lastID });
   });
@@ -401,7 +439,23 @@ app.put('/books/:id', (req, res) => {
     else res.json({ updated: this.changes });
   });
 });
-  
+
+app.delete('/books/:id', (req, res) => {
+  const { id } = req.params; // Extract the ID from the request parameters
+  db.run(`DELETE FROM Books WHERE id = ?`, [id], function(err) {
+    if (err) {
+      // If there's an error, send a 500 (Internal Server Error) response with the error message
+      res.status(500).json({ error: err.message });
+    } else if (this.changes === 0) {
+      // If no rows were affected (i.e., no booking was found with the provided ID), send a 404 (Not Found) response
+      res.status(404).json({ error: 'Booking not found' });
+    } else {
+      // If the booking was successfully deleted, send a 200 (OK) response with the number of affected rows
+      res.json({ deleted: this.changes });
+    }
+  });
+});
+
   // ... include CRUD operations for other tables ...
   
   // Start server
