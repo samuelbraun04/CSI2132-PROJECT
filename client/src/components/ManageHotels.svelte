@@ -64,9 +64,11 @@
                 <th>Hotel Chain ID</th>
                 <th>Stars</th>
                 <th>Address</th>
+                <th>City</th>
                 <th>Number of Rooms</th>
                 <th>Email</th>
                 <th>Phone Number</th>
+                <th>Manager</th>
             </tr>
         </thead>
         
@@ -78,9 +80,11 @@
                     <td>{item.hotelChainId}</td>
                     <td>{item.stars}</td>
                     <td>{item.address}</td>
+                    <td>{item.city}</td>
                     <td>{item.numberOfRooms}</td>
                     <td>{item.emailAddress}</td>
                     <td>{item.phoneNumber}</td>
+                    <td>{item.manager}</td>
                     <td>
                         <button on:click={() => handleUpdate(item)}>Update</button>
                         <button on:click={() => handleDelete(item.id)}>Delete</button>

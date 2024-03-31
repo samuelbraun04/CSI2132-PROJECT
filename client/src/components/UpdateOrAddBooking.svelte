@@ -6,7 +6,7 @@
     let itemID;
     let updatedID;
     let updatedCustomerID;
-    let updatedHotelID;
+    let updatedhotelId;
     let updatedRoomNumber;
     let updatedStartDate;
     let updatedEndDate;
@@ -56,7 +56,7 @@
 
                 updatedID = item.id
                 updatedCustomerID = item.customerID;
-                updatedHotelID = item.hotelID;
+                updatedhotelId = item.hotelId;
                 updatedPaymentID = item.paymentID;
                 updatedRoomNumber = item.roomNumber;
                 updatedStartDate = item.startDate;
@@ -68,7 +68,7 @@
         else{
             updatedID="";
             updatedCustomerID = "";
-            updatedHotelID = "";
+            updatedhotelId = "";
             updatedRoomNumber = "";
             updatedStartDate = "";
             updatedEndDate = "";
@@ -78,7 +78,7 @@
     });
     
     async function handleUpdate() {
-        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate, hotelID: updatedHotelID, paymentID: updatedPaymentID };
+        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate, hotelId: updatedhotelId, paymentID: updatedPaymentID };
 
         //update item in database
         try {
@@ -99,13 +99,13 @@
     }
 
     async function handleCreate() {
-        // Assuming updatedHotelID and updatedPaymentID are the new state variables that hold the selected hotel ID and payment ID
+        // Assuming updatedhotelId and updatedPaymentID are the new state variables that hold the selected hotel ID and payment ID
         const newItem = {
             customerID: updatedCustomerID,
             roomNumber: updatedRoomNumber,
             startDate: updatedStartDate,
             endDate: updatedEndDate,
-            hotelID: updatedHotelID, // Include this in your newItem object
+            hotelId: updatedhotelId, // Include this in your newItem object
             paymentID: updatedPaymentID // Include this in your newItem object
         };
         console.log('testing');
@@ -147,7 +147,7 @@
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Hotel ID:</label>
-                    <select bind:value={updatedHotelID}>
+                    <select bind:value={updatedhotelId}>
                         {#each hotels as { id, name }}
                             <option value={id}>{name} ({id})</option>
                         {/each}
@@ -162,6 +162,15 @@
                         {/each}
                     </select>
                 </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Payment ID:</label>
+                    <select bind:value={updatedPaymentID}>
+                      {#each payments as payment}
+                        <option value={payment.id}>{payment.id} - ${payment.amount} on {payment.paymentDate}</option>
+                      {/each}
+                    </select>
+                  </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Start Date:</label>

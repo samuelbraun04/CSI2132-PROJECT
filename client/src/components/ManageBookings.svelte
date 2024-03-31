@@ -88,7 +88,7 @@
               <tr>
                 <td>{item.id}</td>
                 <td>{item.customerID}</td>
-                <td>{item.hotelID}</td>
+                <td>{item.hotelId}</td>
                 <td>{item.roomNumber}</td>
                 <td>{item.startDate}</td>
                 <td>{item.endDate}</td>

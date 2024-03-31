@@ -1,86 +1,75 @@
 <script>
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
-    
-    let items = [];
+
+    let employees = [];
+    // let actionType = localStorage.getItem('action');
 
     onMount(async () => {
         try {
             const response = await fetch('http://localhost:3000/employees');
             if (!response.ok) {
-                throw new Error('Failed to fetch items');
+                throw new Error('Failed to fetch employees');
             }
-            items = await response.json();
+            employees = await response.json();
         } catch (error) {
             console.error(error);
         }
     });
 
-    async function handleDelete(sin){
+    async function handleDelete(sin) {
         try {
-            const response = await fetch(`http://localhost:3000/employees/${sin}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
-                try {
-                    const response = await fetch('http://localhost:3000/employees');
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch items after deletion');
-                    }
-                    items = await response.json();
-                } catch (error) {
-                    console.error(error);
-                }
-                console.log('Item deleted successfully');
-            } else {
-                console.error('Failed to delete item');
-            }
+            await fetch(`http://localhost:3000/employees/${sin}`, { method: 'DELETE' });
+            // Refresh the list after deletion
+            employees = employees.filter(employee => employee.SIN !== sin);
         } catch (error) {
-            console.error('Error deleting item:', error);
+            console.error('Error deleting employee:', error);
         }
     }
 
-    function handleUpdate(item){
-        localStorage.setItem('itemSIN', item.SIN);
+    function navigateToUpdate(employee) {
+        // localStorage.setItem('employeeData', JSON.stringify(employee));
+        localStorage.setItem('employeeData', employee.SIN);
         localStorage.setItem('action', 'update');
         navigate('/update-add-employees');
     }
 
-    function handleInsert(){
+    function navigateToAdd() {
         localStorage.setItem('action', 'insert');
         navigate('/update-add-employees');
     }
-
-    
 </script>
 
 <div>
     <h1>Manage Employees</h1>
-    <button id=insertBtn on:click={() => handleInsert()}>Insert New Employee</button>
+    <button on:click={navigateToAdd}>Add New Employee</button>
     <table>
         <thead>
             <tr>
                 <th>SIN</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Person ID</th>
                 <th>Positions</th>
                 <th>Hotel ID</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        
         <tbody>
-            {#each items as item}
+            {#each employees as employee}
                 <tr>
-                    <td>{item.SIN}</td>
-                    <td>{item.personID}</td>
-                    <td>{item.positions}</td>
-                    <td>{item.hotelID}</td>
+                    <td>{employee.SIN}</td>
+                    <td>{employee.firstName}</td>
+                    <td>{employee.lastName}</td>
+                    <td>{employee.personID}</td>
+                    <td>{employee.positions}</td>
+                    <td>{employee.hotelId}</td>
                     <td>
-                        <button on:click={() => handleUpdate(item)}>Update</button>
-                        <button on:click={() => handleDelete(item.SIN)}>Delete</button>
+                        <button on:click={() => navigateToUpdate(employee)}>Update</button>
+                        <button on:click={() => handleDelete(employee.SIN)}>Delete</button>
                     </td>
                 </tr>
             {/each}
         </tbody>
-        
     </table>
 </div>

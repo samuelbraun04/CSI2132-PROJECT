@@ -3,6 +3,7 @@
     import { navigate } from 'svelte-routing';
 
     let item;
+    let itemID;
     let itemPaymentID;
     let itemBookingID;
     let updatedAmount;
@@ -34,18 +35,19 @@
 
         //if updating a booking, get all the current data for that specific booking
         if (type == 'updatePayment'){
-            itemPaymentID = localStorage.getItem('paymentID');
+            itemID = localStorage.getItem('itemID');
+            console.log(itemID);
 
             try {
-                const response = await fetch(`http://localhost:3000/payments/${itemPaymentID}`);
+                const response = await fetch(`http://localhost:3000/payments/${itemID}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch item');
                 }
                 item = await response.json();
 
-                updatedAmount = item.Amount;
-                updatedPaymentDate = item.PaymentDate;
-                updatedHotelID = item.hotelID;
+                updatedAmount = item.amount;
+                updatedPaymentDate = item.paymentDate;
+                updatedHotelID = item.hotelId;
             } catch (error) {
                 console.error(error);
             }
@@ -64,11 +66,11 @@
             bookingID: itemBookingID,
             amount: updatedAmount,
             paymentDate: updatedPaymentDate,
-            hotelID: updatedHotelID };
+            hotelId: updatedHotelID };
 
         //update item in database
         try {
-            const response = await fetch(`http://localhost:3000/payments/${itemPaymentID}`, {
+            const response = await fetch(`http://localhost:3000/payments/${itemID}`, {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json'
@@ -79,43 +81,69 @@
         console.error('Error updating item:', error);
         }
         
-        localStorage.removeItem('paymentID');
-        localStorage.removeItem('bookingID');
+        localStorage.removeItem('item');
         localStorage.removeItem('action');
         navigate('/manage-bookings');
     }
 
     async function handleCreate() {
-        // Assuming updatedHotelID and updatedPaymentID are the new state variables that hold the selected hotel ID and payment ID
-        const newItem = {
-            bookingID: itemBookingID,
-            amount: updatedAmount,
-            paymentDate: updatedPaymentDate,
-            hotelID: updatedHotelID
-        };
+    const newItem = {
+        bookingID: itemBookingID,
+        amount: updatedAmount,
+        paymentDate: updatedPaymentDate,
+        hotelId: updatedHotelID
+    };
 
-        // Add item in database
-        const response1 = await fetch('http://localhost:3000/payments', {
+    // Add item in database
+    try {
+        const response = await fetch('http://localhost:3000/payments', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newItem)
         });
+        
+        if (!response.ok) {
+            // Handle error
+            throw new Error('Failed to create payment');
+        }
+        
+        // Get the ID of the newly created payment
+        const payment = await response.json();
+        const newPaymentID = payment.id; // Make sure the server responds with the ID of the newly created payment
 
+        // Now update the booking with the new payment ID
+        const bookingUpdateResponse = await fetch(`http://localhost:3000/books/${itemBookingID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ paymentID: newPaymentID })
+        });
 
-        //**********booking with id=bookingID needs to be updated so paymentID= id for the new payment in payment table
+        if (!bookingUpdateResponse.ok) {
+            // If the update fails, handle it accordingly
+            throw new Error('Failed to update booking with new payment ID');
+        }
 
-
+        console.log('Payment created and booking updated successfully');
+    } catch (error) {
+        console.error('Error:', error.message);
+    } finally {
+        // Clean up and navigate regardless of success or error
+        localStorage.removeItem('itemID');
         localStorage.removeItem('bookingID');
         localStorage.removeItem('action');
         navigate('/manage-bookings');
     }
+}
+
 </script>
 
 <div class="modal">
     <div class="modal-content">
-            <h1 hidden={updateVisibility} >Update Payment</h1>
+            <h1 hidden={updateVisibility}>Update Payment</h1>
             <h1 hidden={createVisibility}>Create New Payment</h1>
             <div id=inputForm>
                 <div class="form-group">

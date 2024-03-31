@@ -61,9 +61,11 @@
         <thead>
             <tr>
                 <th>Customer ID</th>
-                <th>Person ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Hotel ID</th>
                 <th>Date of Registration</th>
+                <th>Actions</th>
             </tr>
         </thead>
         
@@ -71,8 +73,9 @@
             {#each items as item}
                 <tr>
                     <td>{item.id}</td>
-                    <td>{item.personID}</td>
-                    <td>{item.hotelID}</td>
+                    <td>{item.firstName}</td>
+                    <td>{item.lastName}</td>
+                    <td>{item.hotelId}</td>
                     <td>{item.dateOfRegistration}</td>
                     <td>
                         <button on:click={() => handleUpdate(item)}>Update</button>

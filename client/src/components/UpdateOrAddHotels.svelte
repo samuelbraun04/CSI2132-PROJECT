@@ -11,6 +11,7 @@
     let updatedCity; // Added the city field
 
     let updatedNumberOfRooms;
+    let updatedManager;
     let updatedEmailAddress;
     let updatedPhoneNumber;
     let hotelChains = [];
@@ -48,6 +49,7 @@
             updatedAddress = item.address;
             updatedCity = item.city; // Added city field
             updatedNumberOfRooms = item.numberOfRooms;
+            updatedManager = item.manager;
             updatedEmailAddress = item.emailAddress;
             updatedPhoneNumber = item.phoneNumber;
         } catch (error) {
@@ -62,13 +64,16 @@
         updatedCity = ""; // Added city field
         updatedNumberOfRooms = "";
         updatedEmailAddress = "";
+        updatedManager = "";
         updatedPhoneNumber = "";
     }
 });
     
     async function handleUpdate() {
         const updatedItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, city: updatedCity, // Added city field
-            numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
+            numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber, manager: updatedManager};
+
+        console.log(updatedManager);
         
         //update item in database
         try {
@@ -90,7 +95,9 @@
 
     async function handleCreate() {
         const newItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, city: updatedCity, // Added city field
-            numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
+            numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber, manager: updatedManager};
+
+        console.log(newItem);
         
         //add item in database
         const response = await fetch('http://localhost:3000/hotels', {
@@ -108,6 +115,7 @@
             console.error('Failed to create item');
         }
         
+        localStorage.removeItem('item');
         localStorage.removeItem('action');
         navigate('/manage-hotels');
     }
@@ -163,6 +171,11 @@
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Email Address:</label>
                     <input type="text" bind:value={updatedEmailAddress}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Manager:</label>
+                    <input type="text" bind:value={updatedManager}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
