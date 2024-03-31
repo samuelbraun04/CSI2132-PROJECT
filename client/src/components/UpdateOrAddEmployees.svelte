@@ -8,6 +8,7 @@
     let updatedPositions;
     let updatedHotelID;
     let hotels = [];
+    let itemSIN;
 
     let type = localStorage.getItem('action');
     let updateVisibility = (type != 'update');
