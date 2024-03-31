@@ -14,6 +14,7 @@
     let customers = [];
     let hotels = [];
     let rooms = [];
+    let payments = [];
 
     let type = localStorage.getItem('action');
     let updateVisibility = (type != 'update');
@@ -22,10 +23,11 @@
     onMount(async () => {
 
         try {
-            const [customersRes, hotelsRes, roomsRes] = await Promise.all([
+            const [customersRes, hotelsRes, roomsRes, paymentsRes] = await Promise.all([
                 fetch('http://localhost:3000/customers-with-names'),
                 fetch('http://localhost:3000/hotels'),
                 fetch('http://localhost:3000/rooms'),
+                fetch('http://localhost:3000/payments')
             ]);
 
             // if (!customersRes.ok || !hotelsRes.ok || !roomsRes.ok) {
@@ -35,6 +37,8 @@
             customers = await customersRes.json();
             hotels = await hotelsRes.json();
             rooms = await roomsRes.json();
+            payments = await paymentsRes.json();
+
         } catch (error) {
             console.error("Failed to fetch data:", error);
         }
@@ -74,7 +78,7 @@
     });
     
     async function handleUpdate() {
-        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate };
+        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate, hotelID: updatedHotelID, paymentID: updatedPaymentID };
 
         //update item in database
         try {
@@ -132,6 +136,7 @@
             <h1 hidden={createVisibility}>Create New Booking</h1>
             <div id=inputForm>
                 <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Customer ID:</label>
                     <select bind:value={updatedCustomerID}>
                         {#each customers as customer}
@@ -140,6 +145,7 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Hotel ID:</label>
                     <select bind:value={updatedHotelID}>
                         {#each hotels as { id, name }}
@@ -148,6 +154,7 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Room Number:</label>
                     <select bind:value={updatedRoomNumber}>
                         {#each rooms as { roomNumber }}
@@ -166,7 +173,6 @@
                     <input type="date" bind:value={updatedEndDate}>
                 </div>
             </div>
-            
             
             <button id='centerBtn' hidden={updateVisibility} on:click={handleUpdate}>Update</button>
             <button id='centerBtn' hidden={createVisibility} on:click={handleCreate}>Create</button>

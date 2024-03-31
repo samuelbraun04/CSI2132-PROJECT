@@ -3,6 +3,7 @@
   import { navigate } from 'svelte-routing';
   
   let items = [];
+  let isPayment;
 
   onMount(async () => {
       try {
@@ -51,6 +52,18 @@
       navigate('/update-add-booking');
   }
 
+  function handleAddPayment(item){
+      localStorage.setItem('bookingID', item.id);
+      localStorage.setItem('action', 'addPayment');
+      navigate('/update-add-payment');
+  }
+
+  function handleUpdatePayment(item){
+      localStorage.setItem('bookingID', item.id);
+      localStorage.setItem('paymentID', item.paymentID);
+      localStorage.setItem('action', 'updatePayment');
+      navigate('/update-add-payment');
+  }
   
 </script>
 
@@ -62,9 +75,11 @@
           <tr>
             <th>Booking ID</th>
               <th>Customer ID</th>
+              <th>Hotel ID</th>
               <th>Room Number</th>
               <th>Start Date</th>
               <th>End Date</th>
+              <th>Payment ID</th>
           </tr>
       </thead>
       
@@ -73,12 +88,21 @@
               <tr>
                 <td>{item.id}</td>
                 <td>{item.customerID}</td>
+                <td>{item.hotelID}</td>
                 <td>{item.roomNumber}</td>
                 <td>{item.startDate}</td>
                 <td>{item.endDate}</td>
+                <td>{item.paymentID}</td>
                 <td>
-                    <button on:click={() => handleUpdate(item)}>Update</button>
-                    <button on:click={() => handleDelete(item.id)}>Delete</button>
+                    <div display=block>
+                        <button on:click={() => handleUpdate(item)}>Update</button>
+                        <button on:click={() => handleDelete(item.id)}>Delete</button>
+                    </div>
+                    <div display=block>
+                        <button hidden={item.paymentID != ""} on:click={() => handleAddPayment(item)}>Add Payment</button>
+                        <button hidden={item.paymentID == ""} on:click={() => handleUpdatePayment(item)}>Update Payment</button>
+                    </div>
+                    
                 </td>
               </tr>
           {/each}
