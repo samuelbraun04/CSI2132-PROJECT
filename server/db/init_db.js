@@ -445,7 +445,7 @@ const initTables = (callback) => {
     );`);
 
     db.run(`CREATE TABLE IF NOT EXISTS Hotel (
-      hotelID INTEGER PRIMARY KEY,
+      id INTEGER PRIMARY KEY,
       hotelChainId INTEGER NOT NULL,
       name TEXT NOT NULL,
       stars INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
