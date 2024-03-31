@@ -130,6 +130,39 @@ app.get('/hotels', (req, res) => {
   });
 });
 
+app.get('/hotels/rooms-by-city', (req, res) => {
+  const sql = `
+    SELECT city, SUM(numberOfRooms) AS totalNumberOfRooms
+    FROM Hotel
+    GROUP BY city
+  `;
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows.map(row => ({ city: row.city, totalNumberOfRooms: row.totalNumberOfRooms })));
+  });
+});
+
+app.get('/hotels/total-capacity', (req, res) => {
+  const sql = `
+    SELECT h.name AS hotelName, SUM(r.capacity) AS totalCapacity
+    FROM Hotel h
+    JOIN Room r ON h.id = r.hotelId
+    GROUP BY h.id
+  `;
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
 // Update a Hotel
 app.put('/hotels/:id', (req, res) => {
   const { hotelChainId, name, stars, address, numberOfRooms, emailAddress, phoneNumber } = req.body;

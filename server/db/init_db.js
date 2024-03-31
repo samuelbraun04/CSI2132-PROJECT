@@ -132,58 +132,58 @@ const insertPayments = (db) => {
   
 const insertHotels = (db) => {
     const hotels = [
-        { hotelChainId: 1, name: 'Hotel A1', stars: 5, address: '100 Main St, City A, NA', numberOfRooms: 5, emailAddress: 'contact@hotela1.com', phoneNumber: '100-100-1000' },
-        { hotelChainId: 1, name: 'Hotel A2', stars: 4, address: '101 Main St, City A, NA', numberOfRooms: 5, emailAddress: 'info@hotela2.com', phoneNumber: '100-100-1001' },
-        { hotelChainId: 1, name: 'Hotel A3', stars: 3, address: '102 Main St, City B, NA', numberOfRooms: 5, emailAddress: 'support@hotela3.com', phoneNumber: '100-100-1002' },
-        { hotelChainId: 1, name: 'Hotel A4', stars: 4, address: '103 Main St, City B, NA', numberOfRooms: 5, emailAddress: 'contact@hotela4.com', phoneNumber: '100-100-1003' },
-        { hotelChainId: 1, name: 'Hotel A5', stars: 3, address: '104 Main St, City C, NA', numberOfRooms: 5, emailAddress: 'info@hotela5.com', phoneNumber: '100-100-1004' },
-        { hotelChainId: 1, name: 'Hotel A6', stars: 4, address: '105 Main St, City C, NA', numberOfRooms: 5, emailAddress: 'support@hotela6.com', phoneNumber: '100-100-1005' },
-        { hotelChainId: 1, name: 'Hotel A7', stars: 3, address: '106 Main St, City D, NA', numberOfRooms: 5, emailAddress: 'contact@hotela7.com', phoneNumber: '100-100-1006' },
-        { hotelChainId: 1, name: 'Hotel A8', stars: 5, address: '107 Main St, City D, NA', numberOfRooms: 5, emailAddress: 'info@hotela8.com', phoneNumber: '100-100-1007' },
+        { hotelChainId: 1, name: 'Hotel A1', stars: 5, city: "Berlin", address: '100 Main St, City A, NA', numberOfRooms: 5, emailAddress: 'contact@hotela1.com', phoneNumber: '100-100-1000' },
+        { hotelChainId: 1, name: 'Hotel A2', stars: 4, city: "Vancouver", address: '101 Main St, City A, NA', numberOfRooms: 5, emailAddress: 'info@hotela2.com', phoneNumber: '100-100-1001' },
+        { hotelChainId: 1, name: 'Hotel A3', stars: 3, city: "Ottawa", address: '102 Main St, City B, NA', numberOfRooms: 5, emailAddress: 'support@hotela3.com', phoneNumber: '100-100-1002' },
+        { hotelChainId: 1, name: 'Hotel A4', stars: 4, city: "Calgary", address: '103 Main St, City B, NA', numberOfRooms: 5, emailAddress: 'contact@hotela4.com', phoneNumber: '100-100-1003' },
+        { hotelChainId: 1, name: 'Hotel A5', stars: 3, city: "Toronto", address: '104 Main St, City C, NA', numberOfRooms: 5, emailAddress: 'info@hotela5.com', phoneNumber: '100-100-1004' },
+        { hotelChainId: 1, name: 'Hotel A6', stars: 4, city: "Vancouver", address: '105 Main St, City C, NA', numberOfRooms: 5, emailAddress: 'support@hotela6.com', phoneNumber: '100-100-1005' },
+        { hotelChainId: 1, name: 'Hotel A7', stars: 3, city: "Toronto", address: '106 Main St, City D, NA', numberOfRooms: 5, emailAddress: 'contact@hotela7.com', phoneNumber: '100-100-1006' },
+        { hotelChainId: 1, name: 'Hotel A8', stars: 5, city: "Berlin", address: '107 Main St, City D, NA', numberOfRooms: 5, emailAddress: 'info@hotela8.com', phoneNumber: '100-100-1007' },
 
         // Hotel Chain 2
-        { hotelChainId: 2, name: 'Hotel B1', stars: 5, address: '200 Main St, City E, NA', numberOfRooms: 5, emailAddress: 'contact@hotelb1.com', phoneNumber: '200-200-2000' },
-        { hotelChainId: 2, name: 'Hotel B2', stars: 4, address: '201 Main St, City E, NA', numberOfRooms: 5, emailAddress: 'info@hotelb2.com', phoneNumber: '200-200-2001' },
-        { hotelChainId: 2, name: 'Hotel B3', stars: 3, address: '202 Main St, City F, NA', numberOfRooms: 5, emailAddress: 'support@hotelb3.com', phoneNumber: '200-200-2002' },
-        { hotelChainId: 2, name: 'Hotel B4', stars: 4, address: '203 Main St, City F, NA', numberOfRooms: 5, emailAddress: 'contact@hotelb4.com', phoneNumber: '200-200-2003' },
-        { hotelChainId: 2, name: 'Hotel B5', stars: 3, address: '204 Main St, City G, NA', numberOfRooms: 5, emailAddress: 'info@hotelb5.com', phoneNumber: '200-200-2004' },
-        { hotelChainId: 2, name: 'Hotel B6', stars: 4, address: '205 Main St, City G, NA', numberOfRooms: 5, emailAddress: 'support@hotelb6.com', phoneNumber: '200-200-2005' },
-        { hotelChainId: 2, name: 'Hotel B7', stars: 3, address: '206 Main St, City H, NA', numberOfRooms: 5, emailAddress: 'contact@hotelb7.com', phoneNumber: '200-200-2006' },
-        { hotelChainId: 2, name: 'Hotel B8', stars: 5, address: '207 Main St, City H, NA', numberOfRooms: 5, emailAddress: 'info@hotelb8.com', phoneNumber: '200-200-2007' },
+        { hotelChainId: 2, name: 'Hotel B1', stars: 5, city: "London", address: '200 Main St, City E, NA', numberOfRooms: 5, emailAddress: 'contact@hotelb1.com', phoneNumber: '200-200-2000' },
+        { hotelChainId: 2, name: 'Hotel B2', stars: 4, city: "Paris", address: '201 Main St, City E, NA', numberOfRooms: 5, emailAddress: 'info@hotelb2.com', phoneNumber: '200-200-2001' },
+        { hotelChainId: 2, name: 'Hotel B3', stars: 3, city: "Toronto", address: '202 Main St, City F, NA', numberOfRooms: 5, emailAddress: 'support@hotelb3.com', phoneNumber: '200-200-2002' },
+        { hotelChainId: 2, name: 'Hotel B4', stars: 4, city: "Vancouver", address: '203 Main St, City F, NA', numberOfRooms: 5, emailAddress: 'contact@hotelb4.com', phoneNumber: '200-200-2003' },
+        { hotelChainId: 2, name: 'Hotel B5', stars: 3, city: "Rome", address: '204 Main St, City G, NA', numberOfRooms: 5, emailAddress: 'info@hotelb5.com', phoneNumber: '200-200-2004' },
+        { hotelChainId: 2, name: 'Hotel B6', stars: 4, city: "Vancouver", address: '205 Main St, City G, NA', numberOfRooms: 5, emailAddress: 'support@hotelb6.com', phoneNumber: '200-200-2005' },
+        { hotelChainId: 2, name: 'Hotel B7', stars: 3, city: "Toronto", address: '206 Main St, City H, NA', numberOfRooms: 5, emailAddress: 'contact@hotelb7.com', phoneNumber: '200-200-2006' },
+        { hotelChainId: 2, name: 'Hotel B8', stars: 5, city: "Berlin", address: '207 Main St, City H, NA', numberOfRooms: 5, emailAddress: 'info@hotelb8.com', phoneNumber: '200-200-2007' },
 
         // Hotel Chain 3
-        { hotelChainId: 3, name: 'Hotel C1', stars: 5, address: '300 Main St, City I, NA', numberOfRooms: 5, emailAddress: 'contact@hotelc1.com', phoneNumber: '300-300-3000' },
-        { hotelChainId: 3, name: 'Hotel C2', stars: 4, address: '301 Main St, City I, NA', numberOfRooms: 5, emailAddress: 'info@hotelc2.com', phoneNumber: '300-300-3001' },
-        { hotelChainId: 3, name: 'Hotel C3', stars: 3, address: '302 Main St, City J, NA', numberOfRooms: 5, emailAddress: 'support@hotelc3.com', phoneNumber: '300-300-3002' },
-        { hotelChainId: 3, name: 'Hotel C4', stars: 4, address: '303 Main St, City J, NA', numberOfRooms: 5, emailAddress: 'contact@hotelc4.com', phoneNumber: '300-300-3003' },
-        { hotelChainId: 3, name: 'Hotel C5', stars: 3, address: '304 Main St, City K, NA', numberOfRooms: 5, emailAddress: 'info@hotelc5.com', phoneNumber: '300-300-3004' },
-        { hotelChainId: 3, name: 'Hotel C6', stars: 4, address: '305 Main St, City K, NA', numberOfRooms: 5, emailAddress: 'support@hotelc6.com', phoneNumber: '300-300-3005' },
-        { hotelChainId: 3, name: 'Hotel C7', stars: 3, address: '306 Main St, City L, NA', numberOfRooms: 5, emailAddress: 'contact@hotelc7.com', phoneNumber: '300-300-3006' },
-        { hotelChainId: 3, name: 'Hotel C8', stars: 5, address: '307 Main St, City L, NA', numberOfRooms: 5, emailAddress: 'info@hotelc8.com', phoneNumber: '300-300-3007' },
+        { hotelChainId: 3, name: 'Hotel C1', stars: 5, city: "Berlin", address: '300 Main St, City I, NA', numberOfRooms: 5, emailAddress: 'contact@hotelc1.com', phoneNumber: '300-300-3000' },
+        { hotelChainId: 3, name: 'Hotel C2', stars: 4, city: "Sydney", address: '301 Main St, City I, NA', numberOfRooms: 5, emailAddress: 'info@hotelc2.com', phoneNumber: '300-300-3001' },
+        { hotelChainId: 3, name: 'Hotel C3', stars: 3, city: "Victoria", address: '302 Main St, City J, NA', numberOfRooms: 5, emailAddress: 'support@hotelc3.com', phoneNumber: '300-300-3002' },
+        { hotelChainId: 3, name: 'Hotel C4', stars: 4, city: "Vancouver", address: '303 Main St, City J, NA', numberOfRooms: 5, emailAddress: 'contact@hotelc4.com', phoneNumber: '300-300-3003' },
+        { hotelChainId: 3, name: 'Hotel C5', stars: 3, city: "Toronto", address: '304 Main St, City K, NA', numberOfRooms: 5, emailAddress: 'info@hotelc5.com', phoneNumber: '300-300-3004' },
+        { hotelChainId: 3, name: 'Hotel C6', stars: 4, city: "Dallas", address: '305 Main St, City K, NA', numberOfRooms: 5, emailAddress: 'support@hotelc6.com', phoneNumber: '300-300-3005' },
+        { hotelChainId: 3, name: 'Hotel C7', stars: 3, city: "Toronto", address: '306 Main St, City L, NA', numberOfRooms: 5, emailAddress: 'contact@hotelc7.com', phoneNumber: '300-300-3006' },
+        { hotelChainId: 3, name: 'Hotel C8', stars: 5, city: "Berlin", address: '307 Main St, City L, NA', numberOfRooms: 5, emailAddress: 'info@hotelc8.com', phoneNumber: '300-300-3007' },
 
-        { hotelChainId: 4, name: 'Hotel D1', stars: 5, address: '400 Main St, City M, NA', numberOfRooms: 5, emailAddress: 'contact@hoteld1.com', phoneNumber: '400-400-4000' },
-        { hotelChainId: 4, name: 'Hotel D2', stars: 4, address: '401 Main St, City N, NA', numberOfRooms: 5, emailAddress: 'info@hoteld2.com', phoneNumber: '400-400-4001' },
-        { hotelChainId: 4, name: 'Hotel D3', stars: 3, address: '402 Main St, City O, NA', numberOfRooms: 5, emailAddress: 'support@hoteld3.com', phoneNumber: '400-400-4002' },
-        { hotelChainId: 4, name: 'Hotel D4', stars: 4, address: '403 Main St, City P, NA', numberOfRooms: 5, emailAddress: 'contact@hoteld4.com', phoneNumber: '400-400-4003' },
-        { hotelChainId: 4, name: 'Hotel D5', stars: 3, address: '404 Main St, City Q, NA', numberOfRooms: 5, emailAddress: 'info@hoteld5.com', phoneNumber: '400-400-4004' },
-        { hotelChainId: 4, name: 'Hotel D6', stars: 4, address: '405 Main St, City R, NA', numberOfRooms: 5, emailAddress: 'support@hoteld6.com', phoneNumber: '400-400-4005' },
-        { hotelChainId: 4, name: 'Hotel D7', stars: 3, address: '406 Main St, City S, NA', numberOfRooms: 5, emailAddress: 'contact@hoteld7.com', phoneNumber: '400-400-4006' },
-        { hotelChainId: 4, name: 'Hotel D8', stars: 5, address: '407 Main St, City T, NA', numberOfRooms: 5, emailAddress: 'info@hoteld8.com', phoneNumber: '400-400-4007' },
+        { hotelChainId: 4, name: 'Hotel D1', stars: 5, city: "Berlin", address: '400 Main St, City M, NA', numberOfRooms: 5, emailAddress: 'contact@hoteld1.com', phoneNumber: '400-400-4000' },
+        { hotelChainId: 4, name: 'Hotel D2', stars: 4, city: "Montreal", address: '401 Main St, City N, NA', numberOfRooms: 5, emailAddress: 'info@hoteld2.com', phoneNumber: '400-400-4001' },
+        { hotelChainId: 4, name: 'Hotel D3', stars: 3, city: "Toronto", address: '402 Main St, City O, NA', numberOfRooms: 5, emailAddress: 'support@hoteld3.com', phoneNumber: '400-400-4002' },
+        { hotelChainId: 4, name: 'Hotel D4', stars: 4, city: "Montreal", address: '403 Main St, City P, NA', numberOfRooms: 5, emailAddress: 'contact@hoteld4.com', phoneNumber: '400-400-4003' },
+        { hotelChainId: 4, name: 'Hotel D5', stars: 3, city: "Montreal", address: '404 Main St, City Q, NA', numberOfRooms: 5, emailAddress: 'info@hoteld5.com', phoneNumber: '400-400-4004' },
+        { hotelChainId: 4, name: 'Hotel D6', stars: 4, city: "Vancouver", address: '405 Main St, City R, NA', numberOfRooms: 5, emailAddress: 'support@hoteld6.com', phoneNumber: '400-400-4005' },
+        { hotelChainId: 4, name: 'Hotel D7', stars: 3, city: "Toronto", address: '406 Main St, City S, NA', numberOfRooms: 5, emailAddress: 'contact@hoteld7.com', phoneNumber: '400-400-4006' },
+        { hotelChainId: 4, name: 'Hotel D8', stars: 5, city: "Berlin", address: '407 Main St, City T, NA', numberOfRooms: 5, emailAddress: 'info@hoteld8.com', phoneNumber: '400-400-4007' },
 
         // Hotel Chain 5
-        { hotelChainId: 5, name: 'Hotel E1', stars: 5, address: '500 Main St, City U, NA', numberOfRooms: 5, emailAddress: 'contact@hotele1.com', phoneNumber: '500-500-5000' },
-        { hotelChainId: 5, name: 'Hotel E2', stars: 4, address: '501 Main St, City V, NA', numberOfRooms: 5, emailAddress: 'info@hotele2.com', phoneNumber: '500-500-5001' },
-        { hotelChainId: 5, name: 'Hotel E3', stars: 3, address: '502 Main St, City W, NA', numberOfRooms: 5, emailAddress: 'support@hotele3.com', phoneNumber: '500-500-5002' },
-        { hotelChainId: 5, name: 'Hotel E4', stars: 4, address: '503 Main St, City X, NA', numberOfRooms: 5, emailAddress: 'contact@hotele4.com', phoneNumber: '500-500-5003' },
-        { hotelChainId: 5, name: 'Hotel E5', stars: 3, address: '504 Main St, City Y, NA', numberOfRooms: 5, emailAddress: 'info@hotele5.com', phoneNumber: '500-500-5004' },
-        { hotelChainId: 5, name: 'Hotel E6', stars: 4, address: '505 Main St, City Z, NA', numberOfRooms: 5, emailAddress: 'support@hotele6.com', phoneNumber: '500-500-5005' },
-        { hotelChainId: 5, name: 'Hotel E7', stars: 3, address: '506 Main St, City AA, NA', numberOfRooms: 5, emailAddress: 'contact@hotele7.com', phoneNumber: '500-500-5006' },
-        { hotelChainId: 5, name: 'Hotel E8', stars: 5, address: '507 Main St, City AB, NA', numberOfRooms: 5, emailAddress: 'info@hotele8.com', phoneNumber: '500-500-5007' }
+        { hotelChainId: 5, name: 'Hotel E1', stars: 5, city: "Berlin", address: '500 Main St, City U, NA', numberOfRooms: 5, emailAddress: 'contact@hotele1.com', phoneNumber: '500-500-5000' },
+        { hotelChainId: 5, name: 'Hotel E2', stars: 4, city: "Vancouver", address: '501 Main St, City V, NA', numberOfRooms: 5, emailAddress: 'info@hotele2.com', phoneNumber: '500-500-5001' },
+        { hotelChainId: 5, name: 'Hotel E3', stars: 3, city: "Toronto", address: '502 Main St, City W, NA', numberOfRooms: 5, emailAddress: 'support@hotele3.com', phoneNumber: '500-500-5002' },
+        { hotelChainId: 5, name: 'Hotel E4', stars: 4, city: "Ottawa", address: '503 Main St, City X, NA', numberOfRooms: 5, emailAddress: 'contact@hotele4.com', phoneNumber: '500-500-5003' },
+        { hotelChainId: 5, name: 'Hotel E5', stars: 3, city: "Ottawa", address: '504 Main St, City Y, NA', numberOfRooms: 5, emailAddress: 'info@hotele5.com', phoneNumber: '500-500-5004' },
+        { hotelChainId: 5, name: 'Hotel E6', stars: 4, city: "Ottawa", address: '505 Main St, City Z, NA', numberOfRooms: 5, emailAddress: 'support@hotele6.com', phoneNumber: '500-500-5005' },
+        { hotelChainId: 5, name: 'Hotel E7', stars: 3, city: "Toronto", address: '506 Main St, City AA, NA', numberOfRooms: 5, emailAddress: 'contact@hotele7.com', phoneNumber: '500-500-5006' },
+        { hotelChainId: 5, name: 'Hotel E8', stars: 5, city: "Berlin", address: '507 Main St, City AB, NA', numberOfRooms: 5, emailAddress: 'info@hotele8.com', phoneNumber: '500-500-5007' }
     ];
   
     hotels.forEach(hotel => {
-      db.run(`INSERT INTO Hotel (hotelChainId, name, stars, address, numberOfRooms, emailAddress, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [hotel.hotelChainId, hotel.name, hotel.stars, hotel.address, hotel.numberOfRooms, hotel.emailAddress, hotel.phoneNumber], function(err) {
+      db.run(`INSERT INTO Hotel (hotelChainId, name, stars, city, address, numberOfRooms, emailAddress, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [hotel.hotelChainId, hotel.name, hotel.stars, hotel.city, hotel.address, hotel.numberOfRooms, hotel.emailAddress, hotel.phoneNumber], function(err) {
           if (err) console.error(err.message);
           else console.log(`Hotel inserted with ID: ${this.lastID}`);
         });
@@ -431,6 +431,7 @@ const initTables = (callback) => {
       hotelChainId INTEGER NOT NULL,
       name TEXT NOT NULL,
       stars INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
+      city TEXT NOT NULL,
       address TEXT NOT NULL,
       numberOfRooms INTEGER NOT NULL,
       emailAddress TEXT NOT NULL,
