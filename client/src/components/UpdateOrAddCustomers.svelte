@@ -7,7 +7,6 @@
     let updatedPersonID;
     let updatedHotelID;
     let updatedDateOfRegistration;
-    let updatedPaymentID;
     let hotels = [];
 
     let type = localStorage.getItem('action');
@@ -41,7 +40,6 @@
                 updatedPersonID = item.personID;
                 updatedHotelID = item.hotelID;
                 updatedDateOfRegistration = item.dateOfRegistration;
-                updatedPaymentID = item.paymentID;
             } catch (error) {
                 console.error(error);
             }
@@ -50,33 +48,39 @@
             updatedPersonID = "";
             updatedHotelID = "";
             updatedDateOfRegistration = "";
-            updatedPaymentID = "";
         }
     });
     
     async function handleUpdate() {
-        const updatedItem = { hotelID: updatedHotelID, dateOfRegistration: updatedDateOfRegistration, personID: updatedPersonID, paymentID: updatedPaymentID };
+        const updatedItem = { hotelID: updatedHotelID, dateOfRegistration: updatedDateOfRegistration, personID: updatedPersonID };
 
-        //update item in database
         try {
             const response = await fetch(`http://localhost:3000/customers/${itemID}`, {
                 method: 'PUT',
                 headers: {
-                'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updatedItem)
             });
+
+            if (!response.ok) { // If the HTTP status code is not in the 200-299 range
+                const errorDetails = await response.json(); // or response.json() if your server sends JSON responses
+                throw new Error(`Server responded with ${response.status}: ${errorDetails}`);
+            }
+
+            // Proceed if response is OK
+            console.log('Item updated successfully');
         } catch (error) {
-        console.error('Error updating item:', error);
-        }
-        
-        localStorage.removeItem('itemPersonID');
-        localStorage.removeItem('action');
-        navigate('/manage-customers');
+            console.error('Error updating item:', error.message);
     }
 
+    localStorage.removeItem('itemPersonID');
+    localStorage.removeItem('action');
+    navigate('/manage-customers');
+}
+
     async function handleCreate() {
-        const newItem = { hotelID: updatedHotelID, dateOfRegistration: updatedDateOfRegistration, personID: updatedPersonID, paymentID: updatedPaymentID };
+        const newItem = { hotelID: updatedHotelID, dateOfRegistration: updatedDateOfRegistration, personID: updatedPersonID };
         
         //add item in database
         const response = await fetch('http://localhost:3000/customers', {
@@ -122,11 +126,6 @@
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Date of Registration:</label>
                     <input type="date" bind:value={updatedDateOfRegistration}>
-                </div>
-                <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
-                    <label>Payment ID:</label>
-                    <input type="text" bind:value={updatedPaymentID}>
                 </div>
             </div>
             

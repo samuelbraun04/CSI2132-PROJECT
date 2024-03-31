@@ -94,6 +94,27 @@ const insertEmployees = (db) => {
     });
 };
 
+const insertCustomers = (db) => {
+    // Define some sample customers
+    const customers = [
+      { hotelID: 1, dateOfRegistration: '2023-01-01', personID: 1 },
+      { hotelID: 1, dateOfRegistration: '2023-01-02', personID: 2 },
+      { hotelID: 2, dateOfRegistration: '2023-02-01', personID: 3 },
+      { hotelID: 2, dateOfRegistration: '2023-02-15', personID: 4 },
+      { hotelID: 3, dateOfRegistration: '2023-03-10', personID: 5 },
+      // ... add as many customers as needed
+    ];
+  
+    // Iterate over each customer and insert into the database
+    customers.forEach(customer => {
+      db.run(`INSERT INTO Customer (hotelID, dateOfRegistration, personID) VALUES (?, ?, ?)`, 
+        [customer.hotelID, customer.dateOfRegistration, customer.personID], function(err) {
+          if (err) console.error(err.message);
+          else console.log(`Customer inserted with ID: ${this.lastID}`);
+        });
+    });
+  };
+
 const insertPayments = (db) => {
     const payments = [
         { bookingID: 1, amount: 500.00, paymentDate: '2024-03-25', hotelID: 1 },
@@ -126,24 +147,6 @@ const insertPersons = (db) => {
         [person.firstName, person.lastName, person.address], function(err) {
             if (err) console.error(err.message);
             else console.log(`Person inserted with name: ${person.firstName} ${person.lastName}`);
-        });
-    });
-};
-
-const insertCustomers = (db) => {
-    const customers = [
-        { hotelID: 1, dateOfRegistration: '2023-01-01', personID: 1 },
-        { hotelID: 2, dateOfRegistration: '2023-01-02', personID: 2 },
-        { hotelID: 3, dateOfRegistration: '2023-01-03', personID: 3 },
-        { hotelID: 4, dateOfRegistration: '2023-01-04', personID: 4 },
-        { hotelID: 5, dateOfRegistration: '2023-01-05', personID: 5 }
-    ];
-
-    customers.forEach(customer => {
-        db.run(`INSERT INTO Customer (hotelID, dateOfRegistration, personID) VALUES (?, ?, ?)`,
-        [customer.hotelID, customer.dateOfRegistration, customer.personID], function(err) {
-            if (err) console.error(err.message);
-            else console.log(`Customer inserted with Person ID: ${customer.personID}`);
         });
     });
 };

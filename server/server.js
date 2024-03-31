@@ -115,7 +115,7 @@ initTables((db) => {
   // Create a Hotel
 app.post('/hotels', (req, res) => {
   const { hotelChainId, name, stars, address, numberOfRooms, emailAddress, phoneNumber } = req.body;
-  const sql = `INSERT INTO Hotel (hotelChainId, name, stars, address, numberOfRooms, emailAddress, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO Hotel (hotelChainId, name, stars, city, address, numberOfRooms, emailAddress, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
   db.run(sql, [hotelChainId, name, stars, address, numberOfRooms, emailAddress, phoneNumber], function(err) {
     if (err) res.status(500).json({ error: err.message });
     else res.status(201).json({ id: this.lastID });
@@ -301,6 +301,23 @@ app.get('/employees', (req, res) => {
   });
 });
 
+app.get('/employees/:SIN', (req, res) => {
+  const { SIN } = req.params;
+  const sql = `SELECT * FROM Employee WHERE SIN = ?`;
+
+  db.get(sql, [SIN], (err, row) => {
+      if (err) {
+          res.status(500).json({ error: err.message });
+          return;
+      }
+      if (row) {
+          res.json(row);
+      } else {
+          res.status(404).json({ message: 'Employee not found' });
+      }
+  });
+});
+
 // Update an Employee
 app.put('/employees/:SIN', (req, res) => {
   const { personID, positions, hotelID } = req.body;
@@ -388,6 +405,36 @@ app.get('/customers-with-names', (req, res) => {
   });
 });
 
+app.put('/customers/:id', (req, res) => {
+  const { hotelID, dateOfRegistration, personID, paymentID } = req.body;
+  const { id } = req.params; // ID of the customer to update
+  
+  const sql = `UPDATE Customer SET hotelID = ?, dateOfRegistration = ?, personID = ?, paymentID = ? WHERE id = ?`;
+
+  db.run(sql, [hotelID, dateOfRegistration, personID, paymentID, id], function(err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      // this.changes will contain the number of rows updated
+      res.json({ updated: this.changes });
+    }
+  });
+});
+app.get('/customers/:id', (req, res) => {
+  const { id } = req.params;
+  db.get(`SELECT * FROM Customer WHERE id = ?`, [id], (err, row) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      if (row) {
+        res.json(row);
+      } else {
+        res.status(404).json({ error: "Customer not found" });
+      }
+    }
+  });
+});
+
 // Update a Customer
 app.put('/customers/:id', (req, res) => {
   const { hotelID, dateOfRegistration, personID, paymentID } = req.body;
@@ -463,13 +510,18 @@ app.get('/books', (req, res) => {
   });
 });
 
-// Update a Booking
 app.put('/books/:id', (req, res) => {
-  const { customerID, roomNumber, startDate, endDate } = req.body;
+  // Assuming `hotelID` is now part of the information you want to update
+  const { customerID, hotelID, roomNumber, startDate, endDate, paymentID } = req.body;
   const { id } = req.params;
-  db.run(`UPDATE Books SET customerID = ?, roomNumber = ?, startDate = ?, endDate = ? WHERE id = ?`, [customerID, roomNumber, startDate, endDate, id], function(err) {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json({ updated: this.changes });
+
+  db.run(`UPDATE Books SET customerID = ?, hotelID = ?, roomNumber = ?, startDate = ?, endDate = ?, paymentID = ? WHERE id = ?`, 
+  [customerID, hotelID, roomNumber, startDate, endDate, paymentID, id], function(err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ updated: this.changes });
+    }
   });
 });
 

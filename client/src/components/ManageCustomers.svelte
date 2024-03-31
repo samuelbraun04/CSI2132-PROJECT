@@ -64,7 +64,6 @@
                 <th>Person ID</th>
                 <th>Hotel ID</th>
                 <th>Date of Registration</th>
-                <th>Payment ID</th>
             </tr>
         </thead>
         
@@ -75,7 +74,6 @@
                     <td>{item.personID}</td>
                     <td>{item.hotelID}</td>
                     <td>{item.dateOfRegistration}</td>
-                    <td>{item.paymentID}</td>
                     <td>
                         <button on:click={() => handleUpdate(item)}>Update</button>
                         <button on:click={() => handleDelete(item.id)}>Delete</button>

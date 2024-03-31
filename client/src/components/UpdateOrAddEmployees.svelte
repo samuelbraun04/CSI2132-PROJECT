@@ -47,10 +47,10 @@
             }
         }
         else{
-            updatedSIN = "";
-            updatedPersonID = "";
-            updatedPositions = "";
-            updatedHotelID = "";
+            updatedSIN = "3";
+            updatedPersonID = "3";
+            updatedPositions = "3";
+            updatedHotelID = "3";
         }
     });
     
@@ -107,7 +107,7 @@
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>SIN:</label>
-                    <input hidden={updateVisibility} type="text" bind:value={updatedSIN} readonly>
+                    <input hidden={updateVisibility} type="text" bind:value={updatedSIN} >
                     <input hidden={createVisibility} type="text" bind:value={updatedSIN}>
                 </div>
                 <div class="form-group">

@@ -8,11 +8,12 @@
     let updatedHotelChainId;
     let updatedStars;
     let updatedAddress;
+    let updatedCity; // Added the city field
+
     let updatedNumberOfRooms;
     let updatedEmailAddress;
     let updatedPhoneNumber;
     let hotelChains = [];
-
     let type = localStorage.getItem('action');
     let updateVisibility = (type != 'update');
     let createVisibility = (type != 'insert');
@@ -45,6 +46,7 @@
             updatedHotelChainId = item.hotelChainId;
             updatedStars = String(item.stars);
             updatedAddress = item.address;
+            updatedCity = item.city; // Added city field
             updatedNumberOfRooms = item.numberOfRooms;
             updatedEmailAddress = item.emailAddress;
             updatedPhoneNumber = item.phoneNumber;
@@ -57,6 +59,7 @@
         updatedHotelChainId = null;
         updatedStars = null;
         updatedAddress = "";
+        updatedCity = ""; // Added city field
         updatedNumberOfRooms = "";
         updatedEmailAddress = "";
         updatedPhoneNumber = "";
@@ -64,7 +67,7 @@
 });
     
     async function handleUpdate() {
-        const updatedItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, 
+        const updatedItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, city: updatedCity, // Added city field
             numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
         
         //update item in database
@@ -86,7 +89,7 @@
     }
 
     async function handleCreate() {
-        const newItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, 
+        const newItem = { hotelChainId: updatedHotelChainId, name: updatedName, stars: updatedStars, address: updatedAddress, city: updatedCity, // Added city field
             numberOfRooms: updatedNumberOfRooms, emailAddress: updatedEmailAddress, phoneNumber: updatedPhoneNumber};
         
         //add item in database
@@ -145,6 +148,11 @@
                     <!-- svelte-ignore a11y-label-has-associated-control -->
                     <label>Address:</label>
                     <input type="text" bind:value={updatedAddress}>
+                </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>City:</label> <!-- Added city field -->
+                    <input type="text" bind:value={updatedCity}>
                 </div>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->

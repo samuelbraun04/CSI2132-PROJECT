@@ -123,15 +123,15 @@
             <h1 hidden={createVisibility}>Create New Hotel Room</h1>
             <div id=inputForm>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Room Number:</label>
-                    <input hidden={updateVisibility} type="text" bind:value={updatedRoomNumber} readonly>
+                    <input hidden={updateVisibility} type="text" bind:value={updatedRoomNumber} >
                     <input hidden={createVisibility} type="text" bind:value={updatedRoomNumber}>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Hotel ID:</label>
-                    <input hidden={updateVisibility} type="text" bind:value={updatedHotelId} readonly>
+                    <input hidden={updateVisibility} type="text" bind:value={updatedHotelId} >
                     <select hidden={createVisibility} class="form-select" bind:value={updatedHotelId}>
                         {#each hotels as hotel}
                             <option value={hotel.id}>{hotel.id}</option>
@@ -139,17 +139,17 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Price:</label>
                     <input type="text" bind:value={updatedPrice}>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Capacity:</label>
                     <input type="text" bind:value={updatedCapacity}>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Status:</label>
                     <select class="form-select" bind:value={updatedStatus}>
                         <option value="Available">Available</option>
@@ -158,7 +158,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>View:</label>
                     <select class="form-select" bind:value={updatedView}>
                         <option value="Mountain">Mountain</option>
@@ -167,7 +167,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Extendable:</label>
                     <select class="form-select" bind:value={updatedExtendable}>
                         <option value="Yes">Yes</option>
@@ -175,12 +175,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Amenities:</label>
                     <input type="text" bind:value={updatedAmenities}>
                 </div>
                 <div class="form-group">
-                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    
                     <label>Damages:</label>
                     <input type="text" bind:value={updatedDamages}>
                 </div>
