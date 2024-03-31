@@ -431,10 +431,10 @@ const initTables = (callback) => {
       hotelChainId INTEGER NOT NULL,
       name TEXT NOT NULL,
       stars INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
-      address TEXT NOT NULL CHECK (address LIKE '%, NA'),
-      numberOfRooms INTEGER NOT NULL CHECK (numberOfRooms > 0),
-      emailAddress TEXT NOT NULL CHECK (emailAddress LIKE '%@%'),
-      phoneNumber TEXT NOT NULL CHECK (phoneNumber LIKE '%-%-%'),
+      address TEXT NOT NULL,
+      numberOfRooms INTEGER NOT NULL,
+      emailAddress TEXT NOT NULL,
+      phoneNumber TEXT NOT NULL,
       FOREIGN KEY (hotelChainId) REFERENCES HotelChain(id)
     );`);
 
