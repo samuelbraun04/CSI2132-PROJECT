@@ -51,7 +51,6 @@
         navigate('/update-add-hotels');
     }
 
-    
 </script>
 
 <div>
@@ -60,26 +59,32 @@
     <table>
         <thead>
             <tr>
+                <th>Hotel ID</th>
                 <th>Hotel Name</th>
-                <th>Hotel Chain Id</th>
+                <th>Hotel Chain ID</th>
                 <th>Stars</th>
                 <th>Address</th>
+                <th>City</th>
                 <th>Number of Rooms</th>
                 <th>Email</th>
                 <th>Phone Number</th>
+                <th>Manager</th>
             </tr>
         </thead>
         
         <tbody>
             {#each items as item}
                 <tr>
+                    <td>{item.id}</td>
                     <td>{item.name}</td>
                     <td>{item.hotelChainId}</td>
                     <td>{item.stars}</td>
                     <td>{item.address}</td>
+                    <td>{item.city}</td>
                     <td>{item.numberOfRooms}</td>
                     <td>{item.emailAddress}</td>
                     <td>{item.phoneNumber}</td>
+                    <td>{item.manager}</td>
                     <td>
                         <button on:click={() => handleUpdate(item)}>Update</button>
                         <button on:click={() => handleDelete(item.id)}>Delete</button>
@@ -90,10 +95,3 @@
         
     </table>
 </div>
-
-<!-- Modal Component for Update Form -->
-<!-- svelte-ignore missing-declaration -->
-<!--{#if selectedItem != null}
-    <Modal {selectedItem} {updateItem}/>
-{/if}-->
-

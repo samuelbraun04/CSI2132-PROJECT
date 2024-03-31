@@ -12,6 +12,10 @@
 	    navigate('/manage-hotels');
 	  };
 
+      const manageHotelChains = () => {
+	    navigate('/manage-hotel-chains');
+	  };
+
     const manageRooms = () => {
 	    navigate('/manage-rooms');
 	  };
@@ -36,6 +40,7 @@
     <div id=adminPage class='container'>
       <div class="first-div">
         <button id=employeeButtons on:click={manageBookings}>Manage Bookings</button>
+        <button id=employeeButtons on:click={manageHotelChains}>Manage Hotel Chains</button>
         <button id=employeeButtons on:click={manageHotels}>Manage Hotels</button>
         <button id=employeeButtons on:click={manageRooms}>Manage Rooms</button>
       </div>

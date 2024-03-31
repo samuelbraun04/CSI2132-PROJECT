@@ -10,6 +10,12 @@
     import ManageCustomers from './components/ManageCustomers.svelte';
     import ManageEmployees from './components/ManageEmployees.svelte';
   	import UpdateOrAddHotels from './components/UpdateOrAddHotels.svelte';
+	import UpdateOrAddRooms from './components/UpdateOrAddRooms.svelte';
+	import UpdateOrAddEmployees from './components/UpdateOrAddEmployees.svelte';
+	import UpdateOrAddCustomers from './components/UpdateOrAddCustomers.svelte';
+	import UpdateOrAddBooking from './components/UpdateOrAddBooking.svelte';
+	import UpdateOrAddPayment from './components/UpdateOrAddPayment.svelte';
+	import ManageHotelChains from './components/ManageHotelsChains.svelte'
 	
 	let email = '';
 	let password = '';
@@ -49,6 +55,13 @@
       <Route path="/manage-employees" component={ManageEmployees} />
       <Route path="/views" component={Views} />
 	  <Route path="/update-add-hotels" component={UpdateOrAddHotels} />
+	  <Route path="/update-add-rooms" component={UpdateOrAddRooms} />
+	  <Route path="/update-add-employees" component={UpdateOrAddEmployees} />
+	  <Route path="/update-add-customers" component={UpdateOrAddCustomers} />
+	  <Route path="/update-add-booking" component={UpdateOrAddBooking} />
+	  <Route path="/update-add-payment" component={UpdateOrAddPayment} />
+	  <Route path="/manage-hotel-chains" component={ManageHotelChains} />
+
 	  <!-- ... other routes ... -->
 	</Router>
   {/if}
