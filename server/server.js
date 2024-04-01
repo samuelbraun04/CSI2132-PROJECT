@@ -600,31 +600,6 @@ app.delete('/payments/:id', (req, res) => {
   });
 });
 
-// // Create a Booking
-// app.post('/books', (req, res) => {
-//   const { customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn } = req.body;
-  
-//   db.run(`INSERT INTO Books (customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-//   [customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn], function(err) {
-//     if (err) {
-//       res.status(500).json({ error: err.message });
-//       return;
-//     }
-    
-//     // // Assuming successful insertion, immediately archive this booking
-//     // const lastBookingId = this.lastID;
-//     // db.run(`INSERT INTO BookingArchive (OriginalBookingID, CustomerID, HotelID, RoomNumber, StartDate, EndDate, PaymentID, CheckIn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-//     // [lastBookingId, customerID, hotelId, roomNumber, startDate, endDate, paymentID, checkIn], (archiveErr) => {
-//     //   if (archiveErr) {
-//     //     console.error('Failed to archive booking:', archiveErr.message);
-//     //     // Optionally handle error, like logging or sending a notification
-//     //   }
-//     // });
-
-//     // res.status(201).json({ id: lastBookingId });
-//   });
-// });
-
 app.post('/books', (req, res) => {
   // Include hotelId in the destructured assignment
   const { customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn } = req.body;

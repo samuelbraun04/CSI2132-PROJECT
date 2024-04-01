@@ -5,7 +5,7 @@ const dbPath = path.resolve(__dirname, 'hotel_database.db');
 const dropTables = (db) => {
     db.serialize(() => {
         // Drop tables in reverse order of dependency
-        const tables = ['ChangeStatus', 'CheckIn', 'Search', 'Books', 'Payment', 'Customer', 'Employee', 'Manager', 'Room', 'Hotel', 'HotelChain', 'BookingArchive'];
+        const tables = ['Search', 'Books', 'Payment', 'Customer', 'Employee', 'Manager', 'Room', 'Hotel', 'HotelChain', 'BookingArchive'];
         tables.forEach(table => {
             db.run(`DROP TABLE IF EXISTS ${table};`, err => {
                 if (err) {
@@ -18,26 +18,6 @@ const dropTables = (db) => {
     });
 
 };
-
-const createTriggers = (db) => {
-    // Example: Trigger for updating room status after booking
-    db.run(`CREATE TRIGGER UpdateRoomStatusAfterBooking
-            AFTER INSERT ON Books
-            FOR EACH ROW
-            BEGIN
-              UPDATE Room SET status = 'Occupied'
-              WHERE roomNumber = NEW.roomNumber
-              AND hotelId = (SELECT hotelId FROM Customer WHERE id = NEW.customerID);
-            END;`);
-  
-    // Example: Trigger for deleting rooms after a hotel is deleted
-    db.run(`CREATE TRIGGER DeleteRoomsAfterHotelDeletion
-            AFTER DELETE ON Hotel
-            FOR EACH ROW
-            BEGIN
-              DELETE FROM Room WHERE hotelId = OLD.id;
-            END;`);
-  };
 
 // Connect to the SQLite database
 const insertHotelChains = (db) => {
@@ -579,6 +559,24 @@ const initTables = (callback) => {
         FOREIGN KEY (customerId) REFERENCES Customer(id),
         FOREIGN KEY (hotelId) REFERENCES Hotel(id)
       );`);
+
+      db.run(`
+          CREATE TRIGGER IF NOT EXISTS delete_rooms_trigger
+          AFTER DELETE ON Hotel
+          FOR EACH ROW
+          BEGIN
+              DELETE FROM Room WHERE hotelId = OLD.id;
+          END;
+      `);
+
+      db.run(`
+          CREATE TRIGGER IF NOT EXISTS delete_hotels_trigger
+          AFTER DELETE ON HotelChain
+          FOR EACH ROW
+          BEGIN
+              DELETE FROM Hotel WHERE hotelChainId = OLD.id;
+          END;
+      `);
       
       // db.run(`CREATE TABLE IF NOT EXISTS CheckIn (
       //   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -590,6 +588,11 @@ const initTables = (callback) => {
       //   FOREIGN KEY (employeeSIN) REFERENCES Employee(SIN),
       //   FOREIGN KEY (customerID) REFERENCES Customer(id)
       // );`);
+
+      db.run(`CREATE INDEX IF NOT EXISTS idx_customer_id ON Customer(id);`);
+      db.run(`CREATE INDEX IF NOT EXISTS idx_hotel_id ON Hotel(id);`);
+      db.run(`CREATE INDEX IF NOT EXISTS idx_room_hotel_id ON Room(hotelId);`);
+        
 
       db.run(`CREATE TABLE IF NOT EXISTS BookingArchive (
         ArchiveID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -606,18 +609,6 @@ const initTables = (callback) => {
         FOREIGN KEY (CustomerID) REFERENCES Customer(id),
         FOREIGN KEY (HotelID) REFERENCES Hotel(id),
         FOREIGN KEY (PaymentID) REFERENCES Payment(id)
-      );`);
-      
-      db.run(`CREATE TABLE IF NOT EXISTS ChangeStatus (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        roomNumber TEXT NOT NULL,
-        status TEXT NOT NULL CHECK (status IN ('Available', 'Occupied', 'Maintenance', 'Cleaning')),
-        employeeSIN TEXT NOT NULL,
-        changeDate DATE NOT NULL CHECK (changeDate >= date('now')),
-        hotelId INTEGER NOT NULL,
-        FOREIGN KEY (roomNumber, hotelId) REFERENCES Room(roomNumber, hotelId),
-        FOREIGN KEY (employeeSIN) REFERENCES Employee(SIN),
-        FOREIGN KEY (hotelId) REFERENCES Hotel(id)
       );`, function(err) {
         if (err) console.log(err.message);
         else {
@@ -634,12 +625,6 @@ const initTables = (callback) => {
             // Ensure you manage these calls correctly, maybe chaining them to ensure order, if necessary.
         }
     });
-
-
-    // // After creating all tables, create indexes
-    // db.run(`CREATE INDEX IF NOT EXISTS idx_hotel ON Room(hotelId);`);
-    // db.run(`CREATE INDEX IF NOT EXISTS idx_status ON Room(status);`);
-    // db.run(`CREATE INDEX IF NOT EXISTS idx_price ON Room(price);`);
 
     // Again, add more index creation statements here as needed.
 
