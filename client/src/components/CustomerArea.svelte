@@ -120,7 +120,7 @@
         {#each rooms as room}
           <div class="card">
             <div class="room-details">
-              <h2>Room Number: {room.roomNumber} (${room.price})</h2>
+              <h3>Room Number: {room.roomNumber} (${room.price})</h3>
               <p>Hotel: {room.name} ({room.hotelChainId})</p>
               <p>Location: {room.city}</p>
               <p>Capacity: {room.capacity}</p>
