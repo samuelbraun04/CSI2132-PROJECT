@@ -16,6 +16,9 @@
 	import UpdateOrAddBooking from './components/UpdateOrAddBooking.svelte';
 	import UpdateOrAddPayment from './components/UpdateOrAddPayment.svelte';
 	import ManageHotelChains from './components/ManageHotelsChains.svelte'
+	import RoomBooked from './components/RoomBooked.svelte';
+    import Archive from './components/Archive.svelte';
+	import ViewActiveCustomers from './components/ViewActiveCustomers.svelte';
 	
 	let email = '';
 	let password = '';
@@ -61,6 +64,9 @@
 	  <Route path="/update-add-booking" component={UpdateOrAddBooking} />
 	  <Route path="/update-add-payment" component={UpdateOrAddPayment} />
 	  <Route path="/manage-hotel-chains" component={ManageHotelChains} />
+	  <Route path="/room-booked" component={RoomBooked} />
+	  <Route path="/the-archive" component={Archive} />
+	  <Route path='/active-customers' component={ViewActiveCustomers} />
 
 	  <!-- ... other routes ... -->
 	</Router>

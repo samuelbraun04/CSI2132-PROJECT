@@ -5,7 +5,7 @@ const dbPath = path.resolve(__dirname, 'hotel_database.db');
 const dropTables = (db) => {
     db.serialize(() => {
         // Drop tables in reverse order of dependency
-        const tables = ['ChangeStatus', 'CheckIn', 'Search', 'Books', 'Payment', 'Customer', 'Employee', 'Manager', 'Room', 'Hotel', 'HotelChain'];
+        const tables = ['ChangeStatus', 'CheckIn', 'Search', 'Books', 'Payment', 'Customer', 'Employee', 'Manager', 'Room', 'Hotel', 'HotelChain', 'BookingArchive'];
         tables.forEach(table => {
             db.run(`DROP TABLE IF EXISTS ${table};`, err => {
                 if (err) {
@@ -58,22 +58,54 @@ const insertHotelChains = (db) => {
     });
 };
 
-const insertBookings = (db) => {
-    const bookings = [
-        { customerID: 1, paymentID: 1, roomNumber: '3902', startDate: '2024-04-01', endDate: '2024-04-05', hotelId: 1 },
-        { customerID: 2, paymentID: 2, roomNumber: '4005', startDate: '2024-04-10', endDate: '2024-04-15', hotelId: 2 },
-        { customerID: 3, paymentID: 3, roomNumber: '4004', startDate: '2024-05-01', endDate: '2024-05-08', hotelId: 3 },
-        { customerID: 4, paymentID: 4, roomNumber: '3603', startDate: '2024-06-10', endDate: '2024-06-20', hotelId: 4 },
-        { customerID: 5, paymentID: 5, roomNumber: '2801', startDate: '2024-07-01', endDate: '2024-07-05', hotelId: 5 }
-    ];
+// const insertBookings = (db) => {
+//     const bookings = [
+//         { customerID: 1, paymentID: 1, roomNumber: '3902', startDate: '2024-04-01', endDate: '2024-04-05', hotelId: 1, checkIn: false},
+//         { customerID: 2, paymentID: 2, roomNumber: '4005', startDate: '2024-04-10', endDate: '2024-04-15', hotelId: 2, checkIn: false},
+//         { customerID: 3, paymentID: 3, roomNumber: '4004', startDate: '2024-05-01', endDate: '2024-05-08', hotelId: 3, checkIn: false},
+//         { customerID: 4, paymentID: 4, roomNumber: '3603', startDate: '2024-06-10', endDate: '2024-06-20', hotelId: 4, checkIn: false},
+//         { customerID: 5, paymentID: 5, roomNumber: '2801', startDate: '2024-07-01', endDate: '2024-07-05', hotelId: 5, checkIn: false}
+//     ];
 
-    bookings.forEach(booking => {
-        db.run(`INSERT INTO Books (customerID, paymentID, roomNumber, startDate, endDate, hotelId) VALUES (?, ?, ?, ?, ?, ?)`,
-        [booking.customerID, booking.paymentID, booking.roomNumber, booking.startDate, booking.endDate, booking.hotelId], function(err) {
-            if (err) console.error(err.message);
-            else console.log(`Booking inserted for Customer ID: ${booking.customerID}`);
-        });
-    });
+//     bookings.forEach(booking => {
+//         db.run(`INSERT INTO Books (customerID, paymentID, roomNumber, startDate, endDate, hotelId, checkIn) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+//         [booking.customerID, booking.paymentID, booking.roomNumber, booking.startDate, booking.endDate, booking.hotelId, booking.checkIn], function(err) {
+//             if (err) console.error(err.message);
+//             else console.log(`Booking inserted for Customer ID: ${booking.customerID}`);
+//         });
+//     });
+// };
+
+const insertBookings = (db) => {
+  const bookings = [
+      { customerID: 1, paymentID: 1, roomNumber: '3902', startDate: '2024-04-01', endDate: '2024-04-05', hotelId: 1, checkIn: false},
+      { customerID: 2, paymentID: 2, roomNumber: '4005', startDate: '2024-04-10', endDate: '2024-04-15', hotelId: 2, checkIn: false},
+      { customerID: 3, paymentID: 3, roomNumber: '4004', startDate: '2024-05-01', endDate: '2024-05-08', hotelId: 3, checkIn: false},
+      { customerID: 4, paymentID: 4, roomNumber: '3603', startDate: '2024-06-10', endDate: '2024-06-20', hotelId: 4, checkIn: false},
+      { customerID: 5, paymentID: 5, roomNumber: '2801', startDate: '2024-07-01', endDate: '2024-07-05', hotelId: 5, checkIn: false}
+  ];
+
+  bookings.forEach(booking => {
+      db.run(`INSERT INTO Books (customerID, paymentID, roomNumber, startDate, endDate, hotelId, checkIn) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [booking.customerID, booking.paymentID, booking.roomNumber, booking.startDate, booking.endDate, booking.hotelId, booking.checkIn], function(err) {
+          if (err) {
+              console.error("Error inserting into Books:", err.message);
+          } else {
+              console.log(`Booking inserted for Customer ID: ${booking.customerID}`);
+              const lastBookingId = this.lastID; // Capturing the last inserted booking ID
+              
+              // Insert into BookingArchive
+              db.run(`INSERT INTO BookingArchive (OriginalBookingID, CustomerID, HotelID, RoomNumber, StartDate, EndDate, PaymentID, CheckIn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+              [lastBookingId, booking.customerID, booking.hotelId, booking.roomNumber, booking.startDate, booking.endDate, booking.paymentID, booking.checkIn], archiveErr => {
+                  if (archiveErr) {
+                      console.error("Error inserting into BookingArchive:", archiveErr.message);
+                  } else {
+                      console.log(`Booking archived successfully for Customer ID: ${booking.customerID}`);
+                  }
+              });
+          }
+      });
+  });
 };
 
 const insertEmployees = (db) => {
@@ -532,6 +564,7 @@ const initTables = (callback) => {
         startDate DATE NOT NULL,
         endDate DATE NOT NULL,
         paymentID INTEGER,
+        checkIn BOOL DEFAULT False,
         FOREIGN KEY (customerID) REFERENCES Customer(id),
         FOREIGN KEY (roomNumber) REFERENCES Room(roomNumber),
         FOREIGN KEY (paymentID) REFERENCES Payment(id)
@@ -547,15 +580,32 @@ const initTables = (callback) => {
         FOREIGN KEY (hotelId) REFERENCES Hotel(id)
       );`);
       
-      db.run(`CREATE TABLE IF NOT EXISTS CheckIn (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        bookingID INTEGER NOT NULL,
-        employeeSIN TEXT NOT NULL,
-        checkInDate DATE NOT NULL CHECK (checkInDate >= date('now')),
-        customerID INTEGER NOT NULL,
-        FOREIGN KEY (bookingID) REFERENCES Books(id),
-        FOREIGN KEY (employeeSIN) REFERENCES Employee(SIN),
-        FOREIGN KEY (customerID) REFERENCES Customer(id)
+      // db.run(`CREATE TABLE IF NOT EXISTS CheckIn (
+      //   id INTEGER PRIMARY KEY AUTOINCREMENT,
+      //   bookingID INTEGER NOT NULL,
+      //   employeeSIN TEXT NOT NULL,
+      //   checkInDate DATE NOT NULL CHECK (checkInDate >= date('now')),
+      //   customerID INTEGER NOT NULL,
+      //   FOREIGN KEY (bookingID) REFERENCES Books(id),
+      //   FOREIGN KEY (employeeSIN) REFERENCES Employee(SIN),
+      //   FOREIGN KEY (customerID) REFERENCES Customer(id)
+      // );`);
+
+      db.run(`CREATE TABLE IF NOT EXISTS BookingArchive (
+        ArchiveID INTEGER PRIMARY KEY AUTOINCREMENT,
+        OriginalBookingID INTEGER NOT NULL,
+        CustomerID INTEGER,
+        HotelID INTEGER,
+        RoomNumber TEXT NOT NULL,
+        StartDate DATE NOT NULL,
+        EndDate DATE NOT NULL,
+        PaymentID INTEGER,
+        CheckIn BOOLEAN,
+        ArchivedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (OriginalBookingID) REFERENCES Books(id),
+        FOREIGN KEY (CustomerID) REFERENCES Customer(id),
+        FOREIGN KEY (HotelID) REFERENCES Hotel(id),
+        FOREIGN KEY (PaymentID) REFERENCES Payment(id)
       );`);
       
       db.run(`CREATE TABLE IF NOT EXISTS ChangeStatus (

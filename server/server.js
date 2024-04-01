@@ -31,38 +31,57 @@ initTables((db) => {
   
   // SPECIALIZED CRUD
 
-  // room availability to do aggregate query
-  app.get('/hotels/room-availability', (req, res) => {
-    const sql = `
-      SELECT h.name, COUNT(r.roomNumber) AS availableRooms
-      FROM Hotel h
-      JOIN Room r ON h.id = r.hotelId
-      WHERE r.status = 'Available'
-      GROUP BY h.name
-    `;
-    db.all(sql, [], (err, rows) => {
-      if (err) res.status(500).json({ error: err.message });
-      else res.json(rows);
-    });
-  });
+  // // room availability to do aggregate query
+  // app.get('/hotels/room-availability', (req, res) => {
+  //   const sql = `
+  //     SELECT h.name, COUNT(r.roomNumber) AS availableRooms
+  //     FROM Hotel h
+  //     JOIN Room r ON h.id = r.hotelId
+  //     WHERE r.status = 'Available'
+  //     GROUP BY h.name
+  //   `;
+  //   db.all(sql, [], (err, rows) => {
+  //     if (err) res.status(500).json({ error: err.message });
+  //     else res.json(rows);
+  //   });
+  // });
   
   // get hotels with more than 3 rooms booked (popular) to do nested
 
-  app.get('/hotels/popular', (req, res) => {
+  // app.get('/hotels/popular', (req, res) => {
+  //   const sql = `
+  //     SELECT h.name, COUNT(b.id) AS bookedRooms
+  //     FROM Hotel h
+  //     JOIN Room r ON h.id = r.hotelId
+  //     JOIN Books b ON r.roomNumber = b.roomNumber AND r.hotelId = b.hotelId
+  //     WHERE b.startDate <= date('now') AND b.endDate >= date('now')
+  //     GROUP BY h.name
+  //     HAVING bookedRooms > 10
+  //   `;
+  //   db.all(sql, [], (err, rows) => {
+  //     if (err) res.status(500).json({ error: err.message });
+  //     else res.json(rows);
+  //   });
+  // });
+
+  app.get('/customers/multiple-bookings', (req, res) => {
     const sql = `
-      SELECT h.name, COUNT(b.id) AS bookedRooms
-      FROM Hotel h
-      JOIN Room r ON h.id = r.hotelId
-      JOIN Books b ON r.roomNumber = b.roomNumber AND r.hotelId = b.hotelId
-      WHERE b.startDate <= date('now') AND b.endDate >= date('now')
-      GROUP BY h.name
-      HAVING bookedRooms > 10
+        SELECT Customer.id, Customer.firstName, Customer.lastName, COUNT(Books.id) AS NumberOfBookings
+        FROM Customer
+        JOIN Books ON Customer.id = Books.customerID
+        GROUP BY Customer.id
+        HAVING NumberOfBookings > 2;
     `;
+
     db.all(sql, [], (err, rows) => {
-      if (err) res.status(500).json({ error: err.message });
-      else res.json(rows);
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+        } else {
+            res.json(rows);
+        }
     });
-  });
+});
 
 // Read all Hotels
 app.get('/hotels', (req, res) => {
@@ -581,13 +600,37 @@ app.delete('/payments/:id', (req, res) => {
   });
 });
 
-// Create a Booking
+// // Create a Booking
+// app.post('/books', (req, res) => {
+//   const { customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn } = req.body;
+  
+//   db.run(`INSERT INTO Books (customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+//   [customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn], function(err) {
+//     if (err) {
+//       res.status(500).json({ error: err.message });
+//       return;
+//     }
+    
+//     // // Assuming successful insertion, immediately archive this booking
+//     // const lastBookingId = this.lastID;
+//     // db.run(`INSERT INTO BookingArchive (OriginalBookingID, CustomerID, HotelID, RoomNumber, StartDate, EndDate, PaymentID, CheckIn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+//     // [lastBookingId, customerID, hotelId, roomNumber, startDate, endDate, paymentID, checkIn], (archiveErr) => {
+//     //   if (archiveErr) {
+//     //     console.error('Failed to archive booking:', archiveErr.message);
+//     //     // Optionally handle error, like logging or sending a notification
+//     //   }
+//     // });
+
+//     // res.status(201).json({ id: lastBookingId });
+//   });
+// });
+
 app.post('/books', (req, res) => {
   // Include hotelId in the destructured assignment
-  const { customerID, roomNumber, startDate, endDate, hotelId, paymentID } = req.body;
+  const { customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn } = req.body;
   // Make sure to include hotelId in the VALUES list
-  db.run(`INSERT INTO Books (customerID, roomNumber, startDate, endDate, hotelId, paymentID) VALUES (?, ?, ?, ?, ?, ?)`, 
-  [customerID, roomNumber, startDate, endDate, hotelId, paymentID], function(err) {
+  db.run(`INSERT INTO Books (customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+  [customerID, roomNumber, startDate, endDate, hotelId, paymentID, checkIn], function(err) {
     if (err) res.status(500).json({ error: err.message });
     else res.status(201).json({ id: this.lastID });
   });
@@ -625,11 +668,11 @@ app.get('/books/:id', (req, res) => {
 
 app.put('/books/:id', (req, res) => {
   // Assuming `hotelId` is now part of the information you want to update
-  const { customerID, hotelId, roomNumber, startDate, endDate, paymentID } = req.body;
+  const { customerID, hotelId, roomNumber, startDate, endDate, paymentID, checkIn } = req.body;
   const { id } = req.params;
 
-  db.run(`UPDATE Books SET customerID = ?, hotelId = ?, roomNumber = ?, startDate = ?, endDate = ?, paymentID = ? WHERE id = ?`, 
-  [customerID, hotelId, roomNumber, startDate, endDate, paymentID, id], function(err) {
+  db.run(`UPDATE Books SET customerID = ?, hotelId = ?, roomNumber = ?, startDate = ?, endDate = ?, paymentID = ?, checkin = ? WHERE id = ?`, 
+  [customerID, hotelId, roomNumber, startDate, endDate, paymentID, checkIn, id], function(err) {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
@@ -654,55 +697,114 @@ app.delete('/books/:id', (req, res) => {
   });
 });
 
+app.get('/archive', (req, res) => {
+  const sql = 'SELECT * FROM BookingArchive';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+// app.get('/archive', (req, res) => {
+//   const sql = 'SELECT * FROM BookingArchive';
+
+//   db.all(sql, [], (err, rows) => {
+//     if (err) {
+//       res.status(500).json({ error: err.message });
+//       return;
+//     }
+//     res.json(rows);
+//   });
+// });
+
+// app.get('/archive-all-bookings', (req, res) => {
+//   db.all(`SELECT * FROM Books`, [], (err, rows) => {
+//     if (err) {
+//       console.error(err.message);
+//       res.status(500).send('Failed to fetch bookings for archiving.');
+//       return;
+//     }
+
+//     rows.forEach(booking => {
+//       db.run(`INSERT INTO BookingArchive (OriginalBookingID, CustomerID, HotelID, RoomNumber, StartDate, EndDate, PaymentID, CheckIn) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+//       [booking.id, booking.customerID, booking.hotelId, booking.roomNumber, booking.startDate, booking.endDate, booking.paymentID, booking.checkIn], 
+//       (archiveErr) => {
+//         if (archiveErr) {
+//           console.error('Failed to archive booking:', archiveErr.message);
+//           // Handle error
+//         }
+//       });
+//     });
+
+//     res.send('Archiving process initiated.');
+//   });
+// });
+
 app.get('/search', (req, res) => {
   const { startDate, endDate, capacity, area, hotelChain, category, totalRooms, price } = req.query;
-  
+
   let query = `
-    SELECT Room.*, Hotel.name AS hotelName, HotelChain.name AS hotelChainName 
+    SELECT 
+      Room.*, 
+      Hotel.name AS hotelName, 
+      Hotel.city AS hotelCity, 
+      HotelChain.name AS hotelChainName
     FROM Room
     INNER JOIN Hotel ON Room.hotelId = Hotel.id
-    INNER JOIN HotelChain ON Hotel.hotelChainId = HotelChain.id
-    WHERE Room.roomNumber NOT IN (
-      SELECT roomNumber 
-      FROM Books 
-      WHERE (startDate BETWEEN ? AND ?) OR (endDate BETWEEN ? AND ?) OR (startDate <= ? AND endDate >= ?)
-      GROUP BY roomNumber
-    )
+    LEFT JOIN HotelChain ON Hotel.hotelChainId = HotelChain.id
+    WHERE 1=1
   `;
-  let queryParams = [startDate, endDate, startDate, endDate, startDate, endDate];
-  
-  // Append additional filters if they are provided
+
+  const queryParams = [];
+
+  if (startDate && endDate) {
+    query += ` AND Room.roomNumber NOT IN (
+      SELECT roomNumber FROM Books
+      WHERE hotelId = Room.hotelId AND ((startDate BETWEEN ? AND ?) OR (endDate BETWEEN ? AND ?))
+    )`;
+    queryParams.push(startDate, endDate, startDate, endDate);
+  }
+
   if (capacity) {
     query += ` AND Room.capacity >= ?`;
     queryParams.push(capacity);
   }
+
   if (area) {
     query += ` AND Hotel.city = ?`;
     queryParams.push(area);
   }
+
   if (hotelChain) {
-    query += ` AND HotelChain.name = ?`; // Adjust according to your DB schema, e.g., use ID if necessary
+    query += ` AND HotelChain.name = ?`;
     queryParams.push(hotelChain);
   }
+
   if (category) {
     query += ` AND Hotel.stars = ?`;
     queryParams.push(category);
   }
+
   if (totalRooms) {
     query += ` AND Hotel.numberOfRooms >= ?`;
     queryParams.push(totalRooms);
   }
+
   if (price) {
     query += ` AND Room.price <= ?`;
     queryParams.push(price);
   }
 
-  db.all(query, queryParams, (err, rows) => {
+  db.all(query, queryParams, (err, rooms) => {
     if (err) {
       console.error(err.message);
       res.status(500).json({ error: err.message });
     } else {
-      res.json(rows);
+      res.json(rooms);
     }
   });
 });

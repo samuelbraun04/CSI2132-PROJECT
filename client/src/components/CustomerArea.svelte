@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { navigate } from 'svelte-routing';
     
     let searchCriteria = ({
       startDate: '',
@@ -13,31 +14,44 @@
     });
 
     async function bookRoom(room) {
-        const bookingDetails = {
-            customerID: 1, // Example value, should be dynamically set based on the logged-in user
-            roomNumber: room.roomNumber,
-            startDate: searchCriteria.startDate,
-            endDate: searchCriteria.endDate,
-            hotelId: room.hotelId,
-            paymentID: 123, // Example value, this could be generated or retrieved in a real scenario
-        };
-
-        const response = await fetch('http://localhost:3000/books', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(bookingDetails),
-        });
-
-        if (response.ok) {
-            // Handle success - maybe show a confirmation message or update the UI accordingly
-            alert('Room booked successfully!');
-        } else {
-            // Handle error - maybe show an error message
-            alert('Failed to book the room.');
-        }
+    // Fetch hotel details including its city and hotel chain
+    const hotelResponse = await fetch(`http://localhost:3000/hotels/${room.hotelId}`);
+    if (!hotelResponse.ok) {
+        alert('Failed to fetch hotel details.');
+        return; // Stop execution if the hotel details couldn't be fetched
     }
+    const hotel = await hotelResponse.json();
+
+    // Construct the booking details with the additional hotel information
+    const bookingDetails = {
+        customerID: 1, // Dynamically set based on logged-in user
+        roomNumber: room.roomNumber,
+        startDate: searchCriteria.startDate,
+        endDate: searchCriteria.endDate,
+        hotelId: room.hotelId,
+        paymentID: 123, // This could be generated or retrieved in real scenarios
+        hotelCity: hotel.city,
+        hotelChainName: hotel.hotelChainId, // Use the appropriate property for the hotel chain name
+        hotelName: hotel.name
+    };
+
+    // Proceed to book the room
+    const response = await fetch('http://localhost:3000/books', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingDetails),
+    });
+
+    if (response.ok) {
+        // Store booking details in localStorage for use in the confirmation page
+        localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+        navigate('/room-booked'); // Navigate to the booking confirmation page
+    } else {
+        alert('Failed to book the room.');
+    }
+}
   
     let rooms = [];
   
@@ -71,7 +85,7 @@
       <input type="number" min="1" bind:value={searchCriteria.capacity}>
     </label>
     <label>
-      Area:
+      City:
       <input type="text" bind:value={searchCriteria.area}>
     </label>
     <label>
@@ -100,23 +114,24 @@
   </form>
   
   {#if rooms.length > 0}
-    <div>
-        {#each rooms as room}
-        <div class="room-details">
-          <h2>{room.roomNumber} (${room.price})</h2>
-          <p>Hotel: {room.name}</p>
-          <p>Capacity: {room.capacity}</p>
-          <p>View: {room.view}</p>
-          <p>Status: {room.status}</p>
-          <p>Extendable: {room.extendable}</p>
-          <p>Amenities: {room.amenities}</p>
-          <p>Damage Notes: {room.damages || 'None'}</p>
-          <button on:click={() => bookRoom(room)}>Book</button>
-        </div>
-      {/each}      
-    </div>
-  {:else}
-    <p>No rooms found. Please adjust your search criteria.</p>
-  {/if}
+  <div>
+    {#each rooms as room}
+      <div class="room-details">
+        <h2>Room Number: {room.roomNumber} (${room.price})</h2>
+        <p>Hotel: {room.name} ({room.hotelChainId})</p>
+        <p>Location: {room.city}</p>
+        <p>Capacity: {room.capacity}</p>
+        <p>View: {room.view}</p>
+        <p>Status: {room.status}</p>
+        <p>Extendable: {room.extendable}</p>
+        <p>Amenities: {room.amenities}</p>
+        <p>Damage Notes: {room.damages || 'None'}</p>
+        <button on:click={() => bookRoom(room)}>Book</button>
+      </div>
+    {/each}
+  </div>
+{:else}
+  <p>No rooms found. Please adjust your search criteria.</p>
+{/if}
   
 

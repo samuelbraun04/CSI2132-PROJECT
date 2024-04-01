@@ -31,6 +31,11 @@
     const views = () => {
 	    navigate('/views');
 	  };
+
+    const viewArchive = () => {
+	    navigate('/the-archive');
+	  };
+
   </script>
 
   
@@ -39,7 +44,7 @@
     <h1>Admin</h1>
     <div id=adminPage class='container'>
       <div class="first-div">
-        <button id=employeeButtons on:click={manageBookings}>Manage Bookings</button>
+        <button id=employeeButtons on:click={manageBookings}>Manage Bookings/Rentings</button>
         <button id=employeeButtons on:click={manageHotelChains}>Manage Hotel Chains</button>
         <button id=employeeButtons on:click={manageHotels}>Manage Hotels</button>
         <button id=employeeButtons on:click={manageRooms}>Manage Rooms</button>
@@ -48,6 +53,7 @@
         <button id=employeeButtons on:click={manageEmployees}>Manage Employees</button>
         <button id=employeeButtons on:click={manageCustomers}>Manage Customers</button>
         <button id=employeeButtons on:click={views}>Views</button>
+        <button id=employeeButtons on:click={viewArchive}>Archive</button>
       </div>
     </div>
   </div>

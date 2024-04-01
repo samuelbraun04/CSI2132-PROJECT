@@ -30,7 +30,7 @@
 
 <div>
   <h1>Views</h1>
-  <h2>View 1: Number of Rooms per Area</h2>
+  <h2>View 1: Number of Rooms per City</h2>
   <table>
       <thead>
           <tr>

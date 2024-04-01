@@ -11,6 +11,7 @@
     let updatedStartDate;
     let updatedEndDate;
     let updatedPaymentID;
+    let checkInStatus = false;
     let customers = [];
     let hotels = [];
     let rooms = [];
@@ -58,6 +59,7 @@
                 updatedCustomerID = item.customerID;
                 updatedhotelId = item.hotelId;
                 updatedPaymentID = item.paymentID;
+                checkInStatus = item.checkIn;
                 updatedRoomNumber = item.roomNumber;
                 updatedStartDate = item.startDate;
                 updatedEndDate = item.endDate;
@@ -73,12 +75,13 @@
             updatedStartDate = "";
             updatedEndDate = "";
             updatedPaymentID = "";
+            checkInStatus = false;
 
         }
     });
     
     async function handleUpdate() {
-        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate, hotelId: updatedhotelId, paymentID: updatedPaymentID };
+        const updatedItem = { customerID: updatedCustomerID, roomNumber: updatedRoomNumber, startDate: updatedStartDate, endDate: updatedEndDate, hotelId: updatedhotelId, paymentID: updatedPaymentID, checkIn: checkInStatus};
 
         //update item in database
         try {
@@ -106,7 +109,8 @@
             startDate: updatedStartDate,
             endDate: updatedEndDate,
             hotelId: updatedhotelId, // Include this in your newItem object
-            paymentID: updatedPaymentID // Include this in your newItem object
+            paymentID: updatedPaymentID, // Include this in your newItem object
+            checkIn: checkInStatus
         };
         console.log('testing');
         // Add item in database
@@ -117,6 +121,7 @@
             },
             body: JSON.stringify(newItem)
         });
+
         if (response.ok) {
             // Handle success
             console.log('Item created successfully');
@@ -124,7 +129,7 @@
             // Handle error
             console.error('Failed to create item');
         }
-
+        
         localStorage.removeItem('action');
         navigate('/manage-bookings');
     }
@@ -133,7 +138,7 @@
 <div class="modal">
     <div class="modal-content">
             <h1 hidden={updateVisibility} >Update Booking</h1>
-            <h1 hidden={createVisibility}>Create New Booking</h1>
+            <h1 hidden={createVisibility}>Create New Booking/Renting</h1>
             <div id=inputForm>
                 <div class="form-group">
                     <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -181,6 +186,16 @@
                     <label>End Date:</label>
                     <input type="date" bind:value={updatedEndDate}>
                 </div>
+                <div class="form-group">
+                    <!-- svelte-ignore a11y-label-has-associated-control -->
+                    <label>Check In Status:</label>
+                <select bind:value={checkInStatus}>
+                    <option value="true">Renting</option>
+                    <option value="false">Booked</option>
+                </select>
+                </div>
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                
             </div>
             
             <button id='centerBtn' hidden={updateVisibility} on:click={handleUpdate}>Update</button>

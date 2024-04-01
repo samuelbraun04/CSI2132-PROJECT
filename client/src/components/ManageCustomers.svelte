@@ -51,12 +51,17 @@
         navigate('/update-add-customers');
     }
 
+    function viewActiveCustomers(){
+        navigate('/active-customers');
+    }
+
     
 </script>
 
 <div>
     <h1>Manage Customers</h1>
     <button id=insertBtn on:click={() => handleInsert()}>Insert New Customer</button>
+    <button id=insertBtn on:click={() => viewActiveCustomers()}>View Active Customers</button>
     <table>
         <thead>
             <tr>

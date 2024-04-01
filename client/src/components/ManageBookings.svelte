@@ -17,6 +17,54 @@
       }
   });
 
+  function archiveBooking(bookingID) {
+    const bookingDetails = getBookingDetails(bookingID);
+    const customerDetails = getCustomerDetails(bookingDetails.customerID);
+    
+    const archiveEntry = {
+        OriginalBookingID: bookingID,
+        RoomNumber: bookingDetails.roomNumber,
+        HotelID: bookingDetails.hotelID,
+        CustomerID: customerDetails.customerID,
+        CustomerName: customerDetails.name,
+        StartDate: bookingDetails.startDate,
+        EndDate: bookingDetails.endDate,
+        Status: bookingDetails.status,
+    };
+    
+    insertIntoBookingArchive(archiveEntry);
+    deleteBooking(bookingID);
+}
+
+  async function toggleCheckIn(item) {
+    const updatedCheckInStatus = !item.checkIn; // Determine the new check-in status
+
+    try {
+        const response = await fetch(`http://localhost:3000/books/${item.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ ...item, checkIn: updatedCheckInStatus }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update check-in status.');
+        }
+
+        // Directly update the item in the items array
+        const updatedItems = items.map(i => {
+            if (i.id === item.id) {
+                return { ...i, checkIn: updatedCheckInStatus }; // Update the checkIn status of the toggled item
+            }
+            return i; // Return other items unchanged
+        });
+
+        items = updatedItems; // Update the state to trigger reactivity
+    } catch (error) {
+        console.error('Error toggling check-in status:', error);
+        alert(error.message);
+    }
+}
+
   async function handleDelete(id){
       try {
           const response = await fetch(`http://localhost:3000/books/${id}`, {
@@ -68,24 +116,25 @@
 </script>
 
 <div>
-  <h1>Manage Bookings</h1>
-  <button id=insertBtn on:click={() => handleInsert()}>Insert New Booking</button>
+  <h1>Manage Bookings/Rentings</h1>
+  <button id=insertBtn on:click={() => handleInsert()}>Insert New Booking/Renting</button>
   <table>
-      <thead>
-          <tr>
+    <thead>
+        <tr>
             <th>Booking ID</th>
-              <th>Customer ID</th>
-              <th>Hotel ID</th>
-              <th>Room Number</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Payment ID</th>
-          </tr>
-      </thead>
-      
-      <tbody>
-          {#each items as item}
-              <tr>
+            <th>Customer ID</th>
+            <th>Hotel ID</th>
+            <th>Room Number</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Payment ID</th>
+            <th>Check-In Status</th>
+            <th>Actions</th> <!-- Column for actions like Update, Delete, etc. -->
+        </tr>
+    </thead>
+    <tbody>
+        {#each items as item}
+            <tr>
                 <td>{item.id}</td>
                 <td>{item.customerID}</td>
                 <td>{item.hotelId}</td>
@@ -93,20 +142,21 @@
                 <td>{item.startDate}</td>
                 <td>{item.endDate}</td>
                 <td>{item.paymentID}</td>
+                <td>{item.checkIn ? 'Renting' : 'Booked'}</td>
                 <td>
-                    <div display=block>
-                        <button on:click={() => handleUpdate(item)}>Update</button>
-                        <button on:click={() => handleDelete(item.id)}>Delete</button>
-                    </div>
-                    <div display=block>
-                        <button hidden={item.paymentID != ""} on:click={() => handleAddPayment(item)}>Add Payment</button>
-                        <button hidden={item.paymentID == ""} on:click={() => handleUpdatePayment(item)}>Update Payment</button>
-                    </div>
-                    
+                    <!-- Action Buttons -->
+                    <button on:click={() => handleUpdate(item)}>Update</button>
+                    <button on:click={() => handleDelete(item.id)}>Delete</button>
+                    {#if item.paymentID}
+                        <button on:click={() => handleUpdatePayment(item)}>Update Payment</button>
+                    {:else}
+                        <button on:click={() => handleAddPayment(item)}>Add Payment</button>
+                    {/if}
+                    <button on:click={() => toggleCheckIn(item)}>Toggle Check-In</button> <!-- New Button for Check-In -->
                 </td>
-              </tr>
-          {/each}
-      </tbody>
+            </tr>
+        {/each}
+    </tbody>
       
   </table>
 </div>
