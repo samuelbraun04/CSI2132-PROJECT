@@ -529,7 +529,7 @@ const initTables = (callback) => {
       db.run(`CREATE TABLE IF NOT EXISTS Payment (
         id INTEGER PRIMARY KEY,
         bookingID INTEGER NOT NULL,
-        amount FLOAT NOT NULL CHECK (amount >= 0),
+        amount INTEGER NOT NULL CHECK (amount >= 0),
         paymentDate DATE NOT NULL,
         hotelId INTEGER NOT NULL,
         FOREIGN KEY (bookingID) REFERENCES Books(id),
