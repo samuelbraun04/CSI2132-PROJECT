@@ -15,6 +15,30 @@
         }
     });
 
+    async function handleDelete(id){
+        try {
+            const response = await fetch(`http://localhost:3000/hotel-chains/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                try {
+                    const response = await fetch('http://localhost:3000/hotel-chains');
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch items after deletion');
+                    }
+                    items = await response.json();
+                } catch (error) {
+                    console.error(error);
+                }
+                console.log('Item deleted successfully');
+            } else {
+                console.error('Failed to delete item');
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    }
+
 </script>
 
 <div>
@@ -38,6 +62,9 @@
                     <td>{item.numberOfHotels}</td>
                     <td>{item.emailAddress}</td>
                     <td>{item.phoneNumber}</td>
+                    <td>
+                        <button on:click={() => handleDelete(item.id)}>Delete</button>
+                    </td>
                 </tr>
             {/each}
         </tbody>

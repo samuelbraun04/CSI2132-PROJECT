@@ -42,7 +42,7 @@
 
 <div>
     <h1>Manage Employees</h1>
-    <button on:click={navigateToAdd}>Add New Employee</button>
+    <button id=insertBtn on:click={navigateToAdd}>Add New Employee</button>
     <table>
         <thead>
             <tr>

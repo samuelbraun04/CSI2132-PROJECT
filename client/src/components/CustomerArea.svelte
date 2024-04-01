@@ -71,67 +71,73 @@
     $: fetchRooms(), searchCriteria;
   </script>
   
-  <form on:submit|preventDefault={fetchRooms}>
-    <label>
-      Start Date:
-      <input type="date" bind:value={searchCriteria.startDate}>
-    </label>
-    <label>
-      End Date:
-      <input type="date" bind:value={searchCriteria.endDate}>
-    </label>
-    <label>
-      Capacity:
-      <input type="number" min="1" bind:value={searchCriteria.capacity}>
-    </label>
-    <label>
-      City:
-      <input type="text" bind:value={searchCriteria.area}>
-    </label>
-    <label>
-      Hotel Chain:
-      <input type="text" bind:value={searchCriteria.hotelChain}>
-    </label>
-    <label>
-      Category:
-      <select bind:value={searchCriteria.category}>
-        <option value="">Select a category</option>
-        <option value="1">1 star</option>
-        <option value="2">2 stars</option>
-        <option value="3">3 stars</option>
-        <option value="4">4 stars</option>
-        <option value="5">5 stars</option>
-      </select>
-    </label>
-    <label>
-      Total Rooms:
-      <input type="number" min="1" bind:value={searchCriteria.totalRooms}>
-    </label>
-    <label>
-      Price (Max):
-      <input type="number" min="0" bind:value={searchCriteria.price}>
-    </label>
-  </form>
-  
-  {#if rooms.length > 0}
   <div>
-    {#each rooms as room}
-      <div class="room-details">
-        <h2>Room Number: {room.roomNumber} (${room.price})</h2>
-        <p>Hotel: {room.name} ({room.hotelChainId})</p>
-        <p>Location: {room.city}</p>
-        <p>Capacity: {room.capacity}</p>
-        <p>View: {room.view}</p>
-        <p>Status: {room.status}</p>
-        <p>Extendable: {room.extendable}</p>
-        <p>Amenities: {room.amenities}</p>
-        <p>Damage Notes: {room.damages || 'None'}</p>
-        <button on:click={() => bookRoom(room)}>Book</button>
+    <h1>Search for a Hotel Room</h1>
+    <form id="search" on:submit|preventDefault={fetchRooms}>
+      <label>
+        Start Date:
+        <input type="date" bind:value={searchCriteria.startDate}>
+      </label>
+      <label>
+        End Date:
+        <input type="date" bind:value={searchCriteria.endDate}>
+      </label>
+      <label>
+        Capacity:
+        <input type="number" min="1" bind:value={searchCriteria.capacity}>
+      </label>
+      <label>
+        City:
+        <input type="text" bind:value={searchCriteria.area}>
+      </label>
+      <label>
+        Hotel Chain:
+        <input type="text" bind:value={searchCriteria.hotelChain}>
+      </label>
+      <label>
+        Category:
+        <select bind:value={searchCriteria.category}>
+          <option value="">Select a category</option>
+          <option value="1">1 star</option>
+          <option value="2">2 stars</option>
+          <option value="3">3 stars</option>
+          <option value="4">4 stars</option>
+          <option value="5">5 stars</option>
+        </select>
+      </label>
+      <label>
+        Total Rooms:
+        <input type="number" min="1" bind:value={searchCriteria.totalRooms}>
+      </label>
+      <label>
+        Price (Max):
+        <input type="number" min="0" bind:value={searchCriteria.price}>
+      </label>
+    </form>
+  
+    {#if rooms.length > 0}
+      <div class="container"> 
+        {#each rooms as room}
+          <div class="card">
+            <div class="room-details">
+              <h2>Room Number: {room.roomNumber} (${room.price})</h2>
+              <p>Hotel: {room.name} ({room.hotelChainId})</p>
+              <p>Location: {room.city}</p>
+              <p>Capacity: {room.capacity}</p>
+              <p>View: {room.view}</p>
+              <p>Status: {room.status}</p>
+              <p>Extendable: {room.extendable}</p>
+              <p>Amenities: {room.amenities}</p>
+              <p>Damage Notes: {room.damages || 'None'}</p>
+              <button on:click={() => bookRoom(room)}>Book</button>
+            </div>
+          </div>
+        {/each}
       </div>
-    {/each}
-  </div>
-{:else}
-  <p>No rooms found. Please adjust your search criteria.</p>
-{/if}
+  {:else}
+    <p>No rooms found. Please adjust your search criteria.</p>
+  {/if}
+
+</div>
   
 
